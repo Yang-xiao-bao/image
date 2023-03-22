@@ -15,11 +15,13 @@
     "vite-plugin-solid": "^2.5.0"
   },
   "dependencies": {
+    "@antv/g2plot": "^2.4.28",
     "@hope-ui/solid": "^0.6.7",
     "@solidjs/router": "^0.8.1",
     "@stitches/core": "^1.2.8",
     "highlight.js": "^11.7.0",
     "solid-js": "^1.6.10",
-    "solid-transition-group": "^0.0.10"
+    "solid-transition-group": "^0.0.10",
+    "ts-pattern": "^4.2.1"
   }
 }
