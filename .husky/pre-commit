@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+ls -1 src/libs | grep '\.ts$' | xargs -I _ cp src/libs/_ src/libs/_.txt

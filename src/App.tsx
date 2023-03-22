@@ -4,8 +4,8 @@ import { Basic } from './pages/Basic';
 import { Grid, GridItem, List, ListItem, Tabs, Tab, TabList, TabPanel } from '@hope-ui/solid'
 import { CodeBlock } from './components/CodeBlock';
 import { Hist } from './pages/Hist';
-import basic from './libs/show.txt'
-import histCode from './libs/hist.txt'
+import basic from './libs/show.ts.txt'
+import histCode from './libs/hist.ts.txt'
 
 
 const App: Component = () => {
