@@ -17,6 +17,7 @@ import { Channel } from "../types/image"
 
 export type ChannelSelectorProps = {
   value: Channel
+  disabled?: Array<Channel>
   onChange: (value: Channel) => void
 }
 export function ChannelSelector(props: ChannelSelectorProps) {
@@ -25,7 +26,8 @@ export function ChannelSelector(props: ChannelSelectorProps) {
     { channel: 'r', name: "Red" },
     { channel: 'g', name: "Green" },
     { channel: 'b', name: "Blue" },
-  ]
+  ].filter(i => !(props.disabled ?? []).some(c => c === i.channel))
+
   return <InputGroup>
     <InputLeftAddon>
       选择通道

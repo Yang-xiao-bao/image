@@ -1,0 +1,11 @@
+.imgContainer {
+  display:flex;
+  align-items: flex-start;
+  gap:4px;
+}
+.histContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap:4px;
+}

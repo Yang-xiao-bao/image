@@ -15,5 +15,5 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 }
 
 render(() => <HopeProvider>
-  <Router><App /></Router>
+  <Router base="image" ><App /></Router>
 </HopeProvider>, root!);
