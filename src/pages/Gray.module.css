@@ -1,0 +1,53 @@
+.container {
+  height:100%;
+}
+.container > * {
+  margin-block: 10px;
+}
+.previewContainer {
+  gap:var(--gap);
+  display: grid;
+  grid-template-rows: auto auto auto auto;
+  grid-template-columns: auto minmax(400px,1fr);
+  grid-template-areas: "origin hist"
+                       "origin r"
+                       "origin g"
+                       "origin b";
+}
+.hist {
+  grid-area:hist;
+}
+.origin {
+  grid-area: origin;
+  display:flex;
+  align-items:center;
+  justify-conent:center;
+  background-color: var(--hope-colors-primary4);
+}
+.result {
+  grid-area: result;
+  display:flex;
+  align-items:center;
+  justify-conent:center;
+  background-color: var(--hope-colors-primary4);
+}
+.redChannel {
+  grid-area: r;
+}
+.greenChannel {
+  grid-area: g;
+}
+.blueChannel {
+  grid-area: b;
+}
+
+.monoChannelPreview {
+  max-width:200px;
+  max-height:150px;
+}
+.monoChannelPreviewContainer {
+  display:flex;
+  align-items: flex-end;
+  gap: var(--gap);
+  overflow:hidden;
+}

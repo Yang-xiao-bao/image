@@ -4,11 +4,13 @@ import { Channel } from "../types/image"
 
 
 export type ImagePreviewProps = {
+  class?: string
   image: ImageData
   channel?: Channel
 }
 export function ImagePreview(props: ImagePreviewProps) {
   const canvas = <canvas
+    class={props.class}
     width={props.image.width}
     height={props.image.height}
   /> as HTMLCanvasElement

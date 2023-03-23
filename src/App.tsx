@@ -6,7 +6,8 @@ import { CodeBlock } from './components/CodeBlock';
 import { Hist } from './pages/Hist';
 import basic from './libs/show.ts.txt'
 import histCode from './libs/hist.ts.txt'
-
+import { Gray } from './pages/Gray';
+import style from './App.module.css'
 
 const App: Component = () => {
   return (
@@ -23,10 +24,15 @@ const App: Component = () => {
               直方图
             </Link>
           </ListItem>
+          <ListItem>
+            <Link href="/gray">
+              去色
+            </Link>
+          </ListItem>
         </List>
       </GridItem>
       <GridItem>
-        <Tabs>
+        <Tabs class={style.tabs}>
           <TabList>
             <Tab>效果</Tab>
             <Tab>关键代码</Tab>
@@ -37,6 +43,7 @@ const App: Component = () => {
                 component={Basic}
               />
               <Route path="/hist" component={Hist} />
+              <Route path="/gray" component={Gray} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </TabPanel>

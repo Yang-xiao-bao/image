@@ -25,7 +25,8 @@ export function HistBar(props: HistProps) {
     xField: 'x',
     yField: 'y',
     data: [],
-    intervalPadding: 0
+    intervalPadding: 0,
+    animation: false
   })
   const update = () => {
     const total = props.image.width * props.image.height
@@ -34,7 +35,7 @@ export function HistBar(props: HistProps) {
       : (val: number, ind: number) => ({ x: ind, y: val })
     const data = Array.from((hist(props.image)[props.channel as 'r']))
       .map(trans)
-    chart.update({ data })
+    chart.update({ data,animation:false })
   }
   createEffect(() => {
     update()

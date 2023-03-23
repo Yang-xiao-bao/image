@@ -1,5 +1,6 @@
 import hl from 'highlight.js'
-import { createResource, createSignal } from 'solid-js'
+import { JSX } from 'solid-js'
+import {  createEffect, createResource, createSignal } from 'solid-js'
 
 export function CodeBlock(props: { url: string }) {
 
@@ -23,4 +24,14 @@ export function CodeBlock(props: { url: string }) {
         : render()
     }
   </div>
+}
+
+export function Highlight(props: { code:string }) {
+  const code=<code>{props.code}</code> as HTMLElement
+  const el = <pre>{code}</pre> as HTMLPreElement
+  createEffect(() => {
+    el.innerHTML=`<code>${props.code}</code>`
+    hl.highlightElement(el as any);
+  })
+  return el
 }
