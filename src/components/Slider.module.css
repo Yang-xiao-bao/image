@@ -1,0 +1,19 @@
+.track {
+  --size: var(--track-height,2px);
+  --color: var(--hope-colors-primary6);
+  border-top: var(--size) solid var(--color);
+  border-bottom: var(--size) solid var(--color);
+  position: relative;
+}
+.thumb {
+  --size: var(--thumb-size,14px);
+  --color: var(--hope-colors-primary11);
+  all:unset;
+  width:var(--size);
+  height:var(--size);
+  border-radius: 50%;
+  background-color: var(--color);
+  position:absolute;
+  translate: calc(-1* var(--size)/2);
+  top: calc(-1 * var(--size)/2);
+}
