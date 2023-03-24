@@ -6,8 +6,11 @@ import { CodeBlock } from './components/CodeBlock';
 import { Hist } from './pages/Hist';
 import basic from './libs/show.ts.txt'
 import histCode from './libs/hist.ts.txt'
+import gray from './libs/gray.ts.txt'
+import imadjust from './libs/adjust.ts.txt'
 import { Gray } from './pages/Gray';
 import style from './App.module.css'
+import { Adjust } from './pages/Adjust';
 
 const App: Component = () => {
   return (
@@ -29,6 +32,11 @@ const App: Component = () => {
               去色
             </Link>
           </ListItem>
+          <ListItem>
+            <Link href="/adjust">
+              调整(imadjust)
+            </Link>
+          </ListItem>
         </List>
       </GridItem>
       <GridItem>
@@ -44,6 +52,7 @@ const App: Component = () => {
               />
               <Route path="/hist" component={Hist} />
               <Route path="/gray" component={Gray} />
+              <Route path="/adjust" component={Adjust} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </TabPanel>
@@ -59,7 +68,9 @@ const App: Component = () => {
 function ShowCode() {
   const code: Record<string, string> = {
     '/basic': basic,
-    '/hist': histCode
+    '/hist': histCode,
+    '/gray': gray,
+    '/adjust': imadjust
   }
   const location = useLocation()
 

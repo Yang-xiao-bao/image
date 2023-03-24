@@ -3,13 +3,14 @@ import { Tooltip } from '@hope-ui/solid'
 import style from './Slider.module.css'
 
 export type SliderProps = {
+  class?: string
   points: number[]
   max: number
   min: number
   onChange: (points: number[]) => void
 }
 export function Slider(props: SliderProps) {
-  return <div class={style.track}>
+  return <div class={`${style.track} ${props.class}`}>
     <For each={props.points} >
       {(i, ind) =>
         <button

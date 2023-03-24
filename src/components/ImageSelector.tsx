@@ -1,5 +1,6 @@
 import { Input } from '@hope-ui/solid'
 import lena from '../assets/lena.gif'
+import lenaGray from '../assets/lena-gray.png'
 import {
   Select,
   SelectTrigger,
@@ -24,7 +25,8 @@ export type ImageSelectorProps = {
 export function ImageSelector(props: ImageSelectorProps) {
   const [options, setOptions] = createSignal<{ label: string, urlOrName: string }[]>(
     [
-      { label: 'Lena', urlOrName: lena }
+      { label: 'Lena', urlOrName: lena },
+      { label: 'Lena Gray', urlOrName: lenaGray }
     ]
   )
   const [selected, setSelected] = createSignal(lena)

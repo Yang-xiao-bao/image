@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap:10px;
+}
+.addon {
+  width: 150px;
+}
+.slider {
+  flex-grow:1;
+  display:flex;
+  align-items:center;
+  border-radius: var(--hope-radii-sm);
+  border: 1px solid var(--hope-colors-neutral7);
+}
+.slider > * {
+  flex-grow:1;
+}
