@@ -2,6 +2,7 @@ import { InputGroup, InputLeftAddon } from "@hope-ui/solid";
 import { createMemo, createSignal } from "solid-js";
 import { match, P } from "ts-pattern";
 import { Highlight } from "../components/CodeBlock";
+import { CurveViewer } from "../components/CurveViewer";
 import { HistBar } from "../components/HistBar";
 import { ImagePreview } from "../components/ImagePreview";
 import { ImageSelector } from "../components/ImageSelector";
@@ -21,7 +22,7 @@ export function Adjust() {
     }
   })
   return <div class={style.container}>
-    <ImageSelector 
+    <ImageSelector
       defaultSelect="Lena Gray"
       onSelect={setImage}
 
@@ -79,6 +80,17 @@ export function Adjust() {
             <ImagePreview image={adjusted()!} />
             <HistBar image={adjusted()!} channel="all" />
           </div>
+          <CurveViewer
+            range={input() as [number, number]}
+            step={0.01}
+            fn={(x) => {
+              const [ia, ib] = input()
+              const [oa, ob] = output()
+              const di = ib - ia
+              const dO = ob - oa
+              return oa + (((x - ia) / di) ** gamma()[0]) * dO
+            }}
+          />
         </div>)
         .otherwise(() => null)
     }
