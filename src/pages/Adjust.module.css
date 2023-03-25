@@ -16,3 +16,9 @@
 .slider > * {
   flex-grow:1;
 }
+.preview {
+  display:flex;
+}
+.preview canvas {
+  max-height:300px;
+}

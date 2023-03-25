@@ -1,6 +1,8 @@
 import { InputGroup, InputLeftAddon } from "@hope-ui/solid";
 import { createMemo, createSignal } from "solid-js";
 import { match, P } from "ts-pattern";
+import { Highlight } from "../components/CodeBlock";
+import { HistBar } from "../components/HistBar";
 import { ImagePreview } from "../components/ImagePreview";
 import { ImageSelector } from "../components/ImageSelector";
 import { Slider } from "../components/Slider";
@@ -19,7 +21,11 @@ export function Adjust() {
     }
   })
   return <div class={style.container}>
-    <ImageSelector onSelect={setImage} />
+    <ImageSelector 
+      defaultSelect="Lena Gray"
+      onSelect={setImage}
+
+    />
     <InputGroup class={style.inputGroup}>
       <InputLeftAddon class={style.addon}>
         源亮度范围
@@ -61,13 +67,19 @@ export function Adjust() {
         />
       </div>
     </InputGroup>
-    {gamma()[0]}
+    <Highlight code={`adjust(img,[${input().join(',')}],[${output().join(',')}],${gamma()[0]})`} />
     {
       match(image())
-        .with(P.not(P.nullish), img => <>
-          <ImagePreview image={img} />
-          <ImagePreview image={adjusted()!} />
-        </>)
+        .with(P.not(P.nullish), img => <div class={style.preview}>
+          <div>
+            <ImagePreview image={img} />
+            <HistBar image={img} channel="all" />
+          </div>
+          <div>
+            <ImagePreview image={adjusted()!} />
+            <HistBar image={adjusted()!} channel="all" />
+          </div>
+        </div>)
         .otherwise(() => null)
     }
   </div>

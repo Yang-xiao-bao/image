@@ -19,7 +19,18 @@ import { For } from "solid-js/web"
 import { createSignal, onMount } from 'solid-js'
 
 const imageData = new Map<string, ImageData>()
+// a function to get image data from imageData or from url then save to imageData
+
+async function getImageData(urlOrName: string) {
+  if (imageData.has(urlOrName)) {
+    return imageData.get(urlOrName)!
+  }
+  const data = await getImageDataFromUrl(urlOrName)
+  imageData.set(urlOrName, data)
+  return data
+}
 export type ImageSelectorProps = {
+  defaultSelect?: string
   onSelect?: (data: ImageData) => void
 }
 export function ImageSelector(props: ImageSelectorProps) {
@@ -29,10 +40,14 @@ export function ImageSelector(props: ImageSelectorProps) {
       { label: 'Lena Gray', urlOrName: lenaGray }
     ]
   )
-  const [selected, setSelected] = createSignal(lena)
+  // find option in options by label to match defaultSelect fallback to first option
+  const [selected, setSelected] = createSignal(
+    options().find(item => item.label === props.defaultSelect)?.urlOrName ?? options()[0].urlOrName
+  )
   onMount(async () => {
-    props.onSelect?.(await getImageDataFromUrl(lena))
-
+      props.onSelect?.(
+      await getImageData(selected())
+      )
   })
 
   return <InputGroup>
@@ -50,10 +65,7 @@ export function ImageSelector(props: ImageSelectorProps) {
           )
           return
         }
-        if (!imageData.has(e)) {
-          imageData.set(e, await getImageDataFromUrl(e))
-        }
-        props.onSelect?.(imageData.get(e)!)
+        props.onSelect?.(await getImageData(e))
       }}>
       <SelectTrigger>
         <SelectPlaceholder>

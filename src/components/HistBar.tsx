@@ -18,7 +18,7 @@ export function HistBar(props: HistProps) {
   const container = <div
     style={{
       width: props.width ?? "300px",
-      height: props.height ?? "300px"
+      height: props.height ?? "200px"
     }}
   /> as HTMLDivElement
   const chart = new Column(container, {
