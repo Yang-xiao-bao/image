@@ -23,6 +23,7 @@
     "@solidjs/router": "^0.8.1",
     "@stitches/core": "^1.2.8",
     "highlight.js": "^11.7.0",
+    "solid-icons": "^1.0.4",
     "solid-js": "^1.6.10",
     "solid-transition-group": "^0.0.10",
     "ts-pattern": "^4.2.1"

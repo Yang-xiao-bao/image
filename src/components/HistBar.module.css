@@ -1,3 +1,21 @@
+.container {
+  position: relative;
+}
+.container:hover .optionTrigger {
+  visibility: visible;
+}
 .title {
   text-align: center;
+}
+.radioGroup > label {
+  vertical-align: middle;
+}
+.optionTrigger[aria-expanded="true"] {
+  visibility: visible;
+}
+.optionTrigger {
+  visibility: hidden;
+  position: absolute;
+  right:0;
+  z-index:1;
 }
