@@ -1,6 +1,6 @@
 import { Channel } from "../types/image"
 import { Column } from '@antv/g2plot'
-import { hist } from "../libs/hist"
+import { cumulativeHist, hist } from "../libs/hist"
 import { createEffect, createMemo, createSignal, For } from "solid-js"
 import { ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Modal, ModalContent, ModalOverlay, Button, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Radio, RadioGroup, Switch, Text, VStack } from "@hope-ui/solid"
 import { AiOutlineMore } from 'solid-icons/ai'
@@ -16,6 +16,7 @@ export type HistProps = {
 
 type HistOptions = {
   normalized?: boolean
+  cumulative?: boolean
   type: 'linear' | 'log'
 }
 const [histOption, setHistOption] = createSignal<HistOptions>({ type: 'linear', normalized: false })
@@ -40,7 +41,10 @@ export function HistBar(props: HistProps) {
     const trans = histOption().normalized
       ? (val: number, ind: number) => ({ x: ind, y: val / total })
       : (val: number, ind: number) => ({ x: ind, y: val })
-    const data = Array.from((hist(props.image)[props.channel as 'r']))
+    const histFn = histOption().cumulative
+      ? cumulativeHist
+      : hist
+    const data = Array.from((histFn(props.image)[props.channel as 'r']))
       .map(trans)
     return data
   })
@@ -124,6 +128,11 @@ function HistOption(props: {
             cur => ({ ...cur, normalized: !cur.normalized })
           )} >
             归一化
+          </Switch>
+          <Switch checked={histOption().cumulative} onChange={() => setHistOption(
+            cur => ({ ...cur, cumulative: !cur.cumulative })
+          )} >
+            累积
           </Switch>
           <RadioGroup value={histOption().type}
             onChange={
