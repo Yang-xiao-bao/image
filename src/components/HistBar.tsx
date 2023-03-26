@@ -37,7 +37,9 @@ export function HistBar(props: HistProps) {
     animation: false
   })
   const data = createMemo(() => {
-    const total = props.image.width * props.image.height
+    const total = props.channel === 'all'
+      ? (3 * props.image.width * props.image.height)
+      : props.image.width * props.image.height
     const trans = histOption().normalized
       ? (val: number, ind: number) => ({ x: ind, y: val / total })
       : (val: number, ind: number) => ({ x: ind, y: val })
