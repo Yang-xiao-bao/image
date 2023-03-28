@@ -1,6 +1,7 @@
 import { Input } from '@hope-ui/solid'
 import lena from '../assets/lena.gif'
 import lenaGray from '../assets/lena-gray.png'
+import tentalGray from '../assets/dental_xray.png'
 import {
   Select,
   SelectTrigger,
@@ -29,25 +30,34 @@ async function getImageData(urlOrName: string) {
   imageData.set(urlOrName, data)
   return data
 }
+export type ImageItem = {
+  label: string
+  url: string
+}
 export type ImageSelectorProps = {
+  options?: ImageItem[]
   defaultSelect?: string
   onSelect?: (data: ImageData) => void
 }
 export function ImageSelector(props: ImageSelectorProps) {
   const [options, setOptions] = createSignal<{ label: string, urlOrName: string }[]>(
-    [
-      { label: 'Lena', urlOrName: lena },
-      { label: 'Lena Gray', urlOrName: lenaGray }
-    ]
+    (props.options?.map(item => ({ label: item.label, urlOrName: item.url })) ?? []).concat(
+      [
+        { label: 'Lena', urlOrName: lena },
+        { label: 'Lena Gray', urlOrName: lenaGray },
+        { label: 'Dental Gray',urlOrName: tentalGray  }
+
+      ]
+    )
   )
   // find option in options by label to match defaultSelect fallback to first option
   const [selected, setSelected] = createSignal(
     options().find(item => item.label === props.defaultSelect)?.urlOrName ?? options()[0].urlOrName
   )
   onMount(async () => {
-      props.onSelect?.(
+    props.onSelect?.(
       await getImageData(selected())
-      )
+    )
   })
 
   return <InputGroup>

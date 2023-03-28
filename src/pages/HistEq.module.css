@@ -1,0 +1,6 @@
+.previewContainer {
+  display: flex;
+} 
+.previewContainer canvas {
+  max-width: 500px;
+}

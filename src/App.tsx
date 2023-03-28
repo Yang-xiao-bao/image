@@ -11,6 +11,7 @@ import imadjust from './libs/adjust.ts.txt'
 import { Gray } from './pages/Gray';
 import style from './App.module.css'
 import { Adjust } from './pages/Adjust';
+import { HistEq } from './pages/HistEq'
 
 const App: Component = () => {
   return (
@@ -37,6 +38,11 @@ const App: Component = () => {
               调整(imadjust)
             </Link>
           </ListItem>
+          <ListItem>
+            <Link href="/histeq">
+              直方图均衡(histeq)
+            </Link>
+          </ListItem>
         </List>
       </GridItem>
       <GridItem>
@@ -53,6 +59,7 @@ const App: Component = () => {
               <Route path="/hist" component={Hist} />
               <Route path="/gray" component={Gray} />
               <Route path="/adjust" component={Adjust} />
+              <Route path="/histeq" component={HistEq} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </TabPanel>

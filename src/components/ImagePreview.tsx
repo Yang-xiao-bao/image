@@ -1,3 +1,4 @@
+import { Text } from "@hope-ui/solid"
 import { createEffect } from "solid-js"
 import { show } from "../libs/show"
 import { Channel } from "../types/image"
@@ -7,6 +8,7 @@ export type ImagePreviewProps = {
   class?: string
   image: ImageData
   channel?: Channel
+  title?: string
 }
 export function ImagePreview(props: ImagePreviewProps) {
   const canvas = <canvas
@@ -16,8 +18,11 @@ export function ImagePreview(props: ImagePreviewProps) {
   /> as HTMLCanvasElement
   createEffect(() => {
     const ctx = canvas.getContext('2d')
-    show(props.image,ctx!,props.channel ?? 'all')
+    show(props.image, ctx!, props.channel ?? 'all')
   })
 
-  return canvas
+  return <div>
+    <Text>{props.title}</Text>
+    {canvas}
+  </div>
 }
