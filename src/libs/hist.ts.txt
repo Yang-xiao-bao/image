@@ -24,3 +24,25 @@ export function cumulativeHist(data: ImageData) {
   }
   return { r, g, b, all }
 }
+
+export function normalizeHist(hist: { r: Uint32Array, g: Uint32Array, b: Uint32Array, all: Uint32Array },
+  /**
+* 注意这里的size是指像素的个数，而不是字节数
+* 对于CumulativeHist来说，size 必须指定
+* */
+  size?: number) {
+  if (size == null) {
+    size = hist.r.reduce((a, b) => a + b, 0)
+  }
+  const r = new Float32Array(256)
+  const g = new Float32Array(256)
+  const b = new Float32Array(256)
+  const all = new Float32Array(256)
+  for (let i = 0; i < 256; i++) {
+    r[i] = hist.r[i] / size
+    g[i] = hist.g[i] / size
+    b[i] = hist.b[i] / size
+    all[i] = hist.all[i] / (3 * size)
+  }
+  return { r, g, b, all }
+}

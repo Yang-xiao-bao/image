@@ -8,10 +8,13 @@ import basic from './libs/show.ts.txt'
 import histCode from './libs/hist.ts.txt'
 import gray from './libs/gray.ts.txt'
 import imadjust from './libs/adjust.ts.txt'
+import histEqCode from './libs/histeq.ts.txt'
+import strechlimCode from './libs/stretchlim.ts.txt'
 import { Gray } from './pages/Gray';
 import style from './App.module.css'
 import { Adjust } from './pages/Adjust';
 import { HistEq } from './pages/HistEq'
+import { StretchLim } from './pages/Stretchlim';
 
 const App: Component = () => {
   return (
@@ -39,6 +42,11 @@ const App: Component = () => {
             </Link>
           </ListItem>
           <ListItem>
+            <Link href="/adjust-strechlim">
+              自动拉伸(imadjust)
+            </Link>
+          </ListItem>
+          <ListItem>
             <Link href="/histeq">
               直方图均衡(histeq)
             </Link>
@@ -59,6 +67,7 @@ const App: Component = () => {
               <Route path="/hist" component={Hist} />
               <Route path="/gray" component={Gray} />
               <Route path="/adjust" component={Adjust} />
+              <Route path="/adjust-strechlim" component={StretchLim} />
               <Route path="/histeq" component={HistEq} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
@@ -77,7 +86,9 @@ function ShowCode() {
     '/basic': basic,
     '/hist': histCode,
     '/gray': gray,
-    '/adjust': imadjust
+    '/adjust': imadjust,
+    '/histeq': histEqCode,
+    '/adjust-strechlim': strechlimCode
   }
   const location = useLocation()
 

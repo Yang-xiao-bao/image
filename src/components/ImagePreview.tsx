@@ -2,6 +2,7 @@ import { Text } from "@hope-ui/solid"
 import { createEffect } from "solid-js"
 import { show } from "../libs/show"
 import { Channel } from "../types/image"
+import style from './ImagePreview.module.css'
 
 
 export type ImagePreviewProps = {
@@ -12,7 +13,7 @@ export type ImagePreviewProps = {
 }
 export function ImagePreview(props: ImagePreviewProps) {
   const canvas = <canvas
-    class={props.class}
+    class={props.class+ ' ' + style.canvas}
     width={props.image.width}
     height={props.image.height}
   /> as HTMLCanvasElement
