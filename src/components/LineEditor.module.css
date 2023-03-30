@@ -1,0 +1,25 @@
+.container {
+  width: 300px;
+  height: 300px;
+  position: relative;
+  border: 1px solid var(--hope-colors-primary11);
+}
+.container canvas {
+  pointer-events: none;
+}
+.lineContainer {
+  width: 300px;
+  height: 300px;
+}
+.point {
+  --point-size: 10px;
+  --point-color: var(--hope-colors-primary11);
+  all: unset;
+  position: absolute;
+  width: var(--point-size);
+  height: var(--point-size);
+  border-radius: 50%;
+  background-color: var(--point-color);
+  left: calc(-1*var(--point-size)/2);
+  bottom:calc(-1*var(--point-size)/2);
+}
