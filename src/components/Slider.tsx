@@ -1,5 +1,4 @@
 import { Accessor, For, onCleanup } from "solid-js"
-import { Tooltip } from '@hope-ui/solid'
 import style from './Slider.module.css'
 
 export type SliderProps = {

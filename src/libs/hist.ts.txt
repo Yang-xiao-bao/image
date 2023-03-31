@@ -1,3 +1,4 @@
+
 export function hist(data: ImageData) {
   const r = new Uint32Array(256)
   const g = new Uint32Array(256)
@@ -14,8 +15,8 @@ export function hist(data: ImageData) {
   return { r, g, b, all }
 }
 
-export function cumulativeHist(data: ImageData) {
-  const { r, g, b, all } = hist(data)
+export function cumulativeHist(data: ImageData | HistType) {
+  const { r, g, b, all } = data instanceof ImageData ? hist(data) : data
   for (let i = 1; i < r.length; i++) {
     r[i] = r[i - 1] + r[i]
     g[i] = g[i - 1] + g[i]
@@ -25,7 +26,14 @@ export function cumulativeHist(data: ImageData) {
   return { r, g, b, all }
 }
 
-export function normalizeHist(hist: { r: Uint32Array, g: Uint32Array, b: Uint32Array, all: Uint32Array },
+export type HistType = {
+  r: Uint32Array,
+  g: Uint32Array,
+  b: Uint32Array,
+  all: Uint32Array
+}
+
+export function normalizeHist(hist: HistType,
   /**
 * 注意这里的size是指像素的个数，而不是字节数
 * 对于CumulativeHist来说，size 必须指定

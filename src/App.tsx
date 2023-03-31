@@ -15,6 +15,8 @@ import style from './App.module.css'
 import { Adjust } from './pages/Adjust';
 import { HistEq } from './pages/HistEq'
 import { StretchLim } from './pages/Stretchlim';
+import { AdjustLines } from './pages/AdjustLines';
+import { Statistics } from './pages/Statistics';
 
 const App: Component = () => {
   return (
@@ -29,6 +31,11 @@ const App: Component = () => {
           <ListItem>
             <Link href="/hist">
               直方图
+            </Link>
+          </ListItem>
+          <ListItem>
+            <Link href="/statistics">
+              均值、方差
             </Link>
           </ListItem>
           <ListItem>
@@ -67,8 +74,10 @@ const App: Component = () => {
               <Route path="/hist" component={Hist} />
               <Route path="/gray" component={Gray} />
               <Route path="/adjust" component={Adjust} />
+              <Route path="/adjust-lines" component={AdjustLines} />
               <Route path="/adjust-strechlim" component={StretchLim} />
               <Route path="/histeq" component={HistEq} />
+              <Route path="/statistics" component={Statistics} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </TabPanel>

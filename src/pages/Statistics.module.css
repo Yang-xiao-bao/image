@@ -1,0 +1,13 @@
+.itemContainer {
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+}
+.item {
+  display:flex;
+}
+.item canvas {
+  width:300px;
+}
+.info {
+  width:90px;
+}

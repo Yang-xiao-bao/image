@@ -22,7 +22,7 @@ import { createSignal, onMount } from 'solid-js'
 const imageData = new Map<string, ImageData>()
 // a function to get image data from imageData or from url then save to imageData
 
-async function getImageData(urlOrName: string) {
+export async function getImageData(urlOrName: string) {
   if (imageData.has(urlOrName)) {
     return imageData.get(urlOrName)!
   }
