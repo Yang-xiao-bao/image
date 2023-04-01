@@ -10,6 +10,7 @@ import gray from './libs/gray.ts.txt'
 import imadjust from './libs/adjust.ts.txt'
 import histEqCode from './libs/histeq.ts.txt'
 import strechlimCode from './libs/stretchlim.ts.txt'
+import statisticsCode from './libs/statistics.ts.txt'
 import { Gray } from './pages/Gray';
 import style from './App.module.css'
 import { Adjust } from './pages/Adjust';
@@ -97,7 +98,8 @@ function ShowCode() {
     '/gray': gray,
     '/adjust': imadjust,
     '/histeq': histEqCode,
-    '/adjust-strechlim': strechlimCode
+    '/adjust-strechlim': strechlimCode,
+    '/statistics': statisticsCode
   }
   const location = useLocation()
 
