@@ -25,12 +25,21 @@ export function CurveViewer(props: CurveViewerProps) {
     },
     xAxis: {
       type: "linear",
+      max: props.range[1],
+      min: props.range[0]
     },
     smooth: true,
     data: ps()
   })
   chart.render()
   createEffect(() => {
+    chart.update({
+      xAxis: {
+        type: "linear",
+        max: props.range[1],
+        min: props.range[0]
+      },
+    })
     chart.changeData(ps())
   })
   return container

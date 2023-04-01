@@ -1,0 +1,11 @@
+.container {
+  position: relative
+}
+.menu {
+  position: absolute;
+  right: 0;
+  z-index: 1;
+}
+.inputAddon :global(.hope-input-left-addon) {
+  width: 6em;
+}
