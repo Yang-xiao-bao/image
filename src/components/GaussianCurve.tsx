@@ -56,6 +56,10 @@ export function GaussianCurve(props: GaussianCurveProps) {
       }
     }
   })
+  const rangeStr = createMemo(() => {
+    const r = curveViewerProps().range
+    return `[${r[0]},${r[1]}]`
+  })
 
   return <div class={style.container}>
     <ParamsEditor params={curve()} onChange={ps => {
@@ -64,6 +68,9 @@ export function GaussianCurve(props: GaussianCurveProps) {
     <CurveViewer
       {...curveViewerProps()}
     />
+    <div>
+      Range: {rangeStr}
+    </div>
   </div>
 }
 function linear(input: [number, number], output: [number, number]) {
