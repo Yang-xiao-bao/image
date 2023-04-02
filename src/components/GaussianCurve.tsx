@@ -4,35 +4,49 @@ import { createMemo, createSignal, For } from "solid-js"
 import { CurveViewer } from "./CurveViewer"
 import style from './GaussianCurve.module.css'
 
-export type GaussianCurveParam = {
+export type GaussianCurveCrest = {
   a: number
   b: number
   c: number
 }
+export type GaussianCurveParam = {
+  crests: GaussianCurveCrest[],
+  leftXOffset: number
+  rightXOffset: number
+}
+
 export type GaussianCurveProps = {
   range: [number, number]
-  step: number
+  initalParams?: GaussianCurveParam
+  onChange?: (params: GaussianCurveCrest[]) => void
 }
 export function GaussianCurve(props: GaussianCurveProps) {
-  const [params, setParams] = createSignal<GaussianCurveParam[]>([
-    { a: 1, b: 0, c: 1 },
-  ])
+
+  const [curve, setCurve] = createSignal<GaussianCurveParam>(props.initalParams ?? {
+    leftXOffset: 0,
+    rightXOffset: 0,
+    crests: [{ a: 1, b: 0, c: 1 }]
+  })
+
   const curveViewerProps = createMemo(() => {
-    const ps = params()
-    const [first, ...rest] = ps
-    const range = calcuRange(first)
+    const ps = curve()
+    const [first, ...rest] = ps.crests
+    const curveRange = calcuRange(first, 0.0001, 0.0001)
     for (let p of rest) {
-      const [min, max] = calcuRange(p)
-      range[0] = Math.min(range[0], min)
-      range[1] = Math.max(range[1], max)
+      const [min, max] = calcuRange(p, 0.0001, 0.0001)
+      curveRange[0] = Math.min(curveRange[0], min)
+      curveRange[1] = Math.max(curveRange[1], max)
     }
-    const step = (range[1] - range[0]) / 1000
+    curveRange[0] += ps.leftXOffset
+    curveRange[1] += ps.rightXOffset
+    const step = (curveRange[1] - curveRange[0]) / 1000
     return {
-      range,
+      range: curveRange, //props.range,
       step,
       fn: (x: number) => {
         let y = 0
-        for (const param of ps) {
+
+        for (const param of ps.crests) {
           const { a, b, c } = param
           y += a * Math.exp(
             -(((x - b) / c) ** 2) / 2
@@ -44,21 +58,32 @@ export function GaussianCurve(props: GaussianCurveProps) {
   })
 
   return <div class={style.container}>
-    <ParamsEditor params={params()} onChange={setParams} />
+    <ParamsEditor params={curve()} onChange={ps => {
+      setCurve(ps)
+    }} />
     <CurveViewer
       {...curveViewerProps()}
     />
   </div>
 }
-function calcuRange(param: GaussianCurveParam) {
+function linear(input: [number, number], output: [number, number]) {
+  const inputLen = input[1] - input[0]
+  const outputLen = output[1] - output[0]
+  return (v: number) => {
+    // (v - input[0])/inputLen = (V-output[0])/outputLen
+    return output[0] + (v - input[0]) * outputLen / inputLen
+  }
+}
+function calcuRange(param: GaussianCurveCrest, startY: number, endY: number) {
   const { a, b, c } = param
-  const d = Math.sqrt(-2 * c ** 2 * Math.log(0.0001 / a))
-  return [b - d, b + d] as [number, number]
+  const d = Math.sqrt(-2 * c ** 2 * Math.log(startY / a))
+  const d1 = Math.sqrt(-2 * c ** 2 * Math.log(endY / a))
+  return [b - d, b + d1] as [number, number]
 }
 
 function ParamsEditor(props: {
-  params: GaussianCurveParam[]
-  onChange: (ps: GaussianCurveParam[]) => void
+  params: GaussianCurveParam
+  onChange: (ps: GaussianCurveParam) => void
 }) {
   const [opened, setOpened] = createSignal(false)
   return <Popover opened={opened()}>
@@ -70,24 +95,67 @@ function ParamsEditor(props: {
       <PopoverCloseButton onClick={() => setOpened(false)} />
       <PopoverBody>
         <VStack spacing="4px">
-          <For each={props.params}>
+          <div class={style.inputAddon}>
+            <InputGroup size="xs">
+              <InputLeftAddon>
+                左端扩展
+              </InputLeftAddon>
+              <Input
+                type="number"
+                step={1}
+                value={props.params.leftXOffset}
+                onChange={e => {
+                  const leftXOffset = +e.currentTarget.value || props.params.leftXOffset
+                  props.onChange({
+                    ...props.params,
+                    leftXOffset
+                  })
+                }}
+              />
+            </InputGroup>
+            <InputGroup size="xs">
+              <InputLeftAddon>
+                右端扩展
+              </InputLeftAddon>
+              <Input
+                type="number"
+                step={1}
+                value={props.params.rightXOffset}
+                onChange={e => {
+                  const rightXOffset = +e.currentTarget.value || props.params.leftXOffset
+                  props.onChange({
+                    ...props.params,
+                    rightXOffset
+                  })
+                }}
+              />
+            </InputGroup>
+
+          </div>
+          <For each={props.params.crests}>
             {(param, index) => <ParamEditor
               param={param}
               onChange={param => {
-                const ps = props.params.slice()
+                const ps = props.params.crests.slice()
                 ps[index()] = param
-                props.onChange(ps)
+                props.onChange({
+                  ...props.params,
+                  crests: ps
+                })
               }}
             />}
           </For>
           <Button
             onClick={() => {
-              const last = props.params[props.params.length - 1]
-              const r = calcuRange(last)
-              props.onChange([
+              const last = props.params.crests[props.params.crests.length - 1]
+              const r = calcuRange(last, 0.001, 0.001)
+              props.onChange({
                 ...props.params,
-                { a: 1, b: r[1] + 1, c: 1 }
-              ])
+                crests: [
+                  ...props.params.crests,
+                  { a: 1, b: r[1] + 1, c: 1 }
+                ]
+              })
             }}
             size="xs"
           >
@@ -99,8 +167,8 @@ function ParamsEditor(props: {
   </Popover>
 }
 function ParamEditor(props: {
-  param: GaussianCurveParam
-  onChange: (param: GaussianCurveParam) => void
+  param: GaussianCurveCrest
+  onChange: (param: GaussianCurveCrest) => void
 }) {
   return <div class={style.inputAddon} >
     <InputGroup size="xs">

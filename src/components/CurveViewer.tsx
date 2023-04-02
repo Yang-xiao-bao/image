@@ -25,9 +25,11 @@ export function CurveViewer(props: CurveViewerProps) {
     },
     xAxis: {
       type: "linear",
+      nice:false,
       max: props.range[1],
       min: props.range[0]
     },
+    animation:false,
     smooth: true,
     data: ps()
   })
