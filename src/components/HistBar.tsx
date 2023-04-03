@@ -1,14 +1,21 @@
 import { Channel } from "../types/image"
 import { Column } from '@antv/g2plot'
-import { cumulativeHist, hist } from "../libs/hist"
+import { hist } from "../libs/hist"
 import { createEffect, createMemo, createSignal, For } from "solid-js"
 import { ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Modal, ModalContent, ModalOverlay, Button, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Radio, RadioGroup, Switch, Text, VStack } from "@hope-ui/solid"
 import { AiOutlineMore } from 'solid-icons/ai'
 import style from './HistBar.module.css'
 
 export type HistProps = {
-  image: ImageData
-  channel: Omit<Channel, 'all'>
+  /**
+   * image 和 hist 二选一
+   * */
+  image?: ImageData
+  /**
+   * 如果image 为undefined，channel 无效
+   * */
+  channel?: Omit<Channel, 'all'>
+  hist?: Uint32Array
   width?: string
   height?: string
   title?: string
@@ -23,6 +30,32 @@ const [histOption, setHistOption] = createSignal<HistOptions>({ type: 'linear', 
 
 
 export function HistBar(props: HistProps) {
+  return <>
+    {
+      props.image ?
+        <HistBarChart
+          width={props.width}
+          height={props.height}
+          title={props.title}
+          hist={hist(props.image)[(props.channel ?? 'r') as 'r']}
+        />
+        :
+        <HistBarChart
+          width={props.width}
+          height={props.height}
+          title={props.title}
+          hist={props.hist ?? new Uint32Array}
+        />
+    }
+  </>
+}
+
+function HistBarChart(props: {
+  hist: Uint32Array,
+  width?: string,
+  height?: string,
+  title?: string
+}) {
   const container = <div
     style={{
       width: props.width ?? "300px",
@@ -37,24 +70,23 @@ export function HistBar(props: HistProps) {
     animation: false
   })
   const data = createMemo(() => {
-    const total = props.channel === 'all'
-      ? (3 * props.image.width * props.image.height)
-      : props.image.width * props.image.height
-    const trans = histOption().normalized
+    const opt = histOption()
+    const total = props.hist.reduce((a, b) => a + b)
+    const trans = opt.normalized
       ? (val: number, ind: number) => ({ x: ind, y: val / total })
       : (val: number, ind: number) => ({ x: ind, y: val })
-    const histFn = histOption().cumulative
-      ? cumulativeHist
-      : hist
-    const data = Array.from((histFn(props.image)[props.channel as 'r']))
-      .map(trans)
-    return data
+    if (opt.cumulative) {
+      const c = new Uint32Array(props.hist.length)
+      c[0] = props.hist[0]
+      for (let i = 1; i < c.length; i++) {
+        c[i] = c[i - 1] + props.hist[i]
+      }
+      return Array.from(c).map(trans)
+    }
+    return Array.from(props.hist).map(trans)
   })
-  const update = () => {
-    chart.update({ data: data(), animation: false })
-  }
   createEffect(() => {
-    update()
+    chart.changeData(data())
   })
   createEffect(() => {
     const opts = histOption()
