@@ -18,7 +18,7 @@ export type GaussianCurveParam = {
 export type GaussianCurveProps = {
   range: [number, number]
   initalParams?: GaussianCurveParam
-  onChange?: (params: GaussianCurveCrest[]) => void
+  onChange?: (params: GaussianCurveParam) => void
 }
 export function GaussianCurve(props: GaussianCurveProps) {
 
@@ -30,15 +30,7 @@ export function GaussianCurve(props: GaussianCurveProps) {
 
   const curveViewerProps = createMemo(() => {
     const ps = curve()
-    const [first, ...rest] = ps.crests
-    const curveRange = calcuRange(first, 0.0001, 0.0001)
-    for (let p of rest) {
-      const [min, max] = calcuRange(p, 0.0001, 0.0001)
-      curveRange[0] = Math.min(curveRange[0], min)
-      curveRange[1] = Math.max(curveRange[1], max)
-    }
-    curveRange[0] += ps.leftXOffset
-    curveRange[1] += ps.rightXOffset
+    const curveRange = calcuRange(ps)
     const step = (curveRange[1] - curveRange[0]) / 1000
     return {
       range: curveRange, //props.range,
@@ -64,6 +56,7 @@ export function GaussianCurve(props: GaussianCurveProps) {
   return <div class={style.container}>
     <ParamsEditor params={curve()} onChange={ps => {
       setCurve(ps)
+      props.onChange?.(ps)
     }} />
     <CurveViewer
       {...curveViewerProps()}
@@ -73,6 +66,18 @@ export function GaussianCurve(props: GaussianCurveProps) {
     </div>
   </div>
 }
+
+export function calcY(ps: GaussianCurveCrest[], x: number) {
+  let y = 0
+  for (const param of ps) {
+    const { a, b, c } = param
+    y += a * Math.exp(
+      -(((x - b) / c) ** 2) / 2
+    )
+  }
+  return y
+}
+
 function linear(input: [number, number], output: [number, number]) {
   const inputLen = input[1] - input[0]
   const outputLen = output[1] - output[0]
@@ -81,11 +86,35 @@ function linear(input: [number, number], output: [number, number]) {
     return output[0] + (v - input[0]) * outputLen / inputLen
   }
 }
-function calcuRange(param: GaussianCurveCrest, startY: number, endY: number) {
+function calcuCrestRange(param: GaussianCurveCrest, startY: number, endY: number) {
   const { a, b, c } = param
   const d = Math.sqrt(-2 * c ** 2 * Math.log(startY / a))
   const d1 = Math.sqrt(-2 * c ** 2 * Math.log(endY / a))
   return [b - d, b + d1] as [number, number]
+}
+
+export function calcuRange(param: GaussianCurveParam) {
+  const [first, ...rest] = param.crests
+  const curveRange = calcuCrestRange(first, 0.0001, 0.0001)
+  for (let p of rest) {
+    const [min, max] = calcuCrestRange(p, 0.0001, 0.0001)
+    curveRange[0] = Math.min(curveRange[0], min)
+    curveRange[1] = Math.max(curveRange[1], max)
+  }
+  curveRange[0] += param.leftXOffset
+  curveRange[1] += param.rightXOffset
+  return curveRange
+}
+export function getHist(param: GaussianCurveParam) {
+  const range = calcuRange(param)
+  if (range[1] < 0 || range[0] > 255) {
+    console.warn('No overlap')
+  }
+  const hist = new Uint32Array(256)
+  for (let i = 0; i < 256; i++) {
+    hist[i] = Math.round(calcY(param.crests, i) * 100)+1
+  }
+  return hist
 }
 
 function ParamsEditor(props: {
@@ -155,7 +184,7 @@ function ParamsEditor(props: {
           <Button
             onClick={() => {
               const last = props.params.crests[props.params.crests.length - 1]
-              const r = calcuRange(last, 0.001, 0.001)
+              const r = calcuCrestRange(last, 0.001, 0.001)
               props.onChange({
                 ...props.params,
                 crests: [

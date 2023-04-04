@@ -18,6 +18,7 @@ import { HistEq } from './pages/HistEq'
 import { StretchLim } from './pages/Stretchlim';
 import { AdjustLines } from './pages/AdjustLines';
 import { Statistics } from './pages/Statistics';
+import { HistSpecification } from './pages/HistSpecification'
 
 const App: Component = () => {
   return (
@@ -59,6 +60,11 @@ const App: Component = () => {
               直方图均衡(histeq)
             </Link>
           </ListItem>
+          <ListItem>
+            <Link href="/hist-specification">
+              直方图匹配
+            </Link>
+          </ListItem>
         </List>
       </GridItem>
       <GridItem>
@@ -78,6 +84,7 @@ const App: Component = () => {
               <Route path="/adjust-lines" component={AdjustLines} />
               <Route path="/adjust-strechlim" component={StretchLim} />
               <Route path="/histeq" component={HistEq} />
+              <Route path="/hist-specification" component={HistSpecification} />
               <Route path="/statistics" component={Statistics} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
@@ -99,6 +106,7 @@ function ShowCode() {
     '/adjust': imadjust,
     '/histeq': histEqCode,
     '/adjust-strechlim': strechlimCode,
+    '/hist-specification': '',
     '/statistics': statisticsCode
   }
   const location = useLocation()

@@ -16,7 +16,7 @@ export function hist(data: ImageData) {
 }
 
 export function cumulativeHist(data: ImageData | HistType) {
-  const { r, g, b, all } = data instanceof ImageData ? hist(data) : data
+  const { r, g, b, all } = data instanceof ImageData ? hist(data) : copy(data)
   for (let i = 1; i < r.length; i++) {
     r[i] = r[i - 1] + r[i]
     g[i] = g[i - 1] + g[i]
@@ -24,6 +24,15 @@ export function cumulativeHist(data: ImageData | HistType) {
     all[i] = all[i - 1] + all[i]
   }
   return { r, g, b, all }
+}
+
+export function copy(hist: HistType) {
+  return {
+    r: new Uint32Array(hist.r),
+    g: new Uint32Array(hist.g),
+    b: new Uint32Array(hist.b),
+    all: new Uint32Array(hist.all)
+  }
 }
 
 export type HistType = {

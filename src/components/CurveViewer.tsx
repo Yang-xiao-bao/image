@@ -16,7 +16,7 @@ export function CurveViewer(props: CurveViewerProps) {
     }
     return points
   })
-  const container = <div /> as HTMLDivElement
+  const container = <div class="curve-viewer" /> as HTMLDivElement
   const chart = new Line(container, {
     xField: "x",
     yField: "y",
