@@ -1,9 +1,10 @@
 import { cumulativeHist, HistType, normalizeHist } from "./hist";
 
 export function histMatch(img: ImageData, hist: Omit<HistType, 'all'>) {
+  console.log("["+Array.from(hist.r).join(";")+"]")
   const result = new ImageData(img.width, img.height)
-  const cdfr = normalizeHist(cumulativeHist(img))
-  const cdfz = normalizeHist(cumulativeHist({ ...hist, all: new Uint32Array(256) }))
+  const cdfr = normalizeHist(cumulativeHist(img), img.width * img.height)
+  const cdfz = normalizeHist(cumulativeHist({ ...hist, all: new Uint32Array(256) }), hist.r.reduce((a, b) => a + b, 0))
   // r --> s
   const tr = (r: number, channel: 'r' | 'g' | 'b') => Math.round(255 * cdfr[channel][r])
   // z --> s
@@ -49,6 +50,7 @@ export function histMatch(img: ImageData, hist: Omit<HistType, 'all'>) {
     result.data[i] = zr
     result.data[i + 1] = zg
     result.data[i + 2] = zb
+    result.data[i + 3] = img.data[i + 3]
   }
   return result
 }
