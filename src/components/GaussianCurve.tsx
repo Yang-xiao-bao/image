@@ -78,14 +78,6 @@ export function calcY(ps: GaussianCurveCrest[], x: number) {
   return y
 }
 
-function linear(input: [number, number], output: [number, number]) {
-  const inputLen = input[1] - input[0]
-  const outputLen = output[1] - output[0]
-  return (v: number) => {
-    // (v - input[0])/inputLen = (V-output[0])/outputLen
-    return output[0] + (v - input[0]) * outputLen / inputLen
-  }
-}
 function calcuCrestRange(param: GaussianCurveCrest, startY: number, endY: number) {
   const { a, b, c } = param
   const d = Math.sqrt(-2 * c ** 2 * Math.log(startY / a))

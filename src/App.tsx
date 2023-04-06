@@ -51,6 +51,11 @@ const App: Component = () => {
             </Link>
           </ListItem>
           <ListItem>
+            <Link href="/adjust-lines">
+              分段调整
+            </Link>
+          </ListItem>
+          <ListItem>
             <Link href="/adjust-strechlim">
               自动拉伸(imadjust)
             </Link>
