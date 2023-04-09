@@ -7,9 +7,9 @@ export function statistics(image: ImageData) {
     b: cdf.b.reduce((a, b, i) => a + b * i, 0),
   }
   const variance = {
-    r: cdf.r.reduce((a, b, i) => a + b * (i - mean.r) ** 2, 0),
-    g: cdf.g.reduce((a, b, i) => a + b * (i - mean.g) ** 2, 0),
-    b: cdf.b.reduce((a, b, i) => a + b * (i - mean.b) ** 2, 0),
+    r: cdf.r.reduce((a, p, ri) => a + p * (ri - mean.r) ** 2, 0),
+    g: cdf.g.reduce((a, p, gi) => a + p * (gi - mean.g) ** 2, 0),
+    b: cdf.b.reduce((a, p, bi) => a + p * (bi - mean.b) ** 2, 0)
   }
   return { mean, variance }
 }

@@ -19,6 +19,8 @@ import { StretchLim } from './pages/Stretchlim';
 import { AdjustLines } from './pages/AdjustLines';
 import { Statistics } from './pages/Statistics';
 import { HistSpecification } from './pages/HistSpecification'
+import { LocalHistProcessing } from './pages/LocalHistProcessing';
+import localHistProcessingCode from './libs/localHist.ts.txt'
 
 const App: Component = () => {
   return (
@@ -70,6 +72,11 @@ const App: Component = () => {
               直方图匹配
             </Link>
           </ListItem>
+          <ListItem>
+            <Link href="/local-hist-processing">
+              局部直方图处理
+            </Link>
+          </ListItem>
         </List>
       </GridItem>
       <GridItem>
@@ -90,6 +97,7 @@ const App: Component = () => {
               <Route path="/adjust-strechlim" component={StretchLim} />
               <Route path="/histeq" component={HistEq} />
               <Route path="/hist-specification" component={HistSpecification} />
+              <Route path="/local-hist-processing" component={LocalHistProcessing} />
               <Route path="/statistics" component={Statistics} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
@@ -112,6 +120,7 @@ function ShowCode() {
     '/histeq': histEqCode,
     '/adjust-strechlim': strechlimCode,
     '/hist-specification': '',
+    '/local-hist-processing': localHistProcessingCode,
     '/statistics': statisticsCode
   }
   const location = useLocation()
