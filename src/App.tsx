@@ -21,6 +21,7 @@ import { Statistics } from './pages/Statistics';
 import { HistSpecification } from './pages/HistSpecification'
 import { LocalHistProcessing } from './pages/LocalHistProcessing';
 import localHistProcessingCode from './libs/localHist.ts.txt'
+import { ExcatHistMatch } from './pages/ExactHistMatch';
 
 const App: Component = () => {
   return (
@@ -98,6 +99,7 @@ const App: Component = () => {
               <Route path="/histeq" component={HistEq} />
               <Route path="/hist-specification" component={HistSpecification} />
               <Route path="/local-hist-processing" component={LocalHistProcessing} />
+              <Route path="/excat-hist-match" component={ExcatHistMatch} />
               <Route path="/statistics" component={Statistics} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
