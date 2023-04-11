@@ -1,6 +1,7 @@
 import { Channel } from "../types/image";
 import { HistType } from "./hist";
 import { create } from './mat'
+import { avl } from './avl'
 
 const neighborMat = {
   4: create([
@@ -46,9 +47,14 @@ const neighbors: Record<4 | 8 | 13 | 21 | 25, (4 | 8 | 13 | 21 | 25)[]> = {
 }
 
 export function exactHistMatch(img: ImageData, hist: Omit<HistType, 'all'>, k: 1 | 4 | 8 | 13 | 21 | 25) {
-  const r = ordering()
-  const g = ordering()
-  const b = ordering()
+  type Data = {
+    x: number,
+    y: number,
+    weight: number,
+  }
+  const r = avl<Data>((a, b) => a.weight - b.weight)
+  const g = avl<Data>((a, b) => a.weight - b.weight)
+  const b = avl<Data>((a, b) => a.weight - b.weight)
 
   function getIndensity(x: number, y: number, c: Omit<Channel, 'all'>, k: 4 | 8 | 13 | 21 | 25) {
     const neighbor = neighborMat[k]
