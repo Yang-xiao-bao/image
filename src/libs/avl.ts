@@ -91,7 +91,7 @@ export function avl<T>(cmp: (a: T, b: T) => number) {
     if (node) {
       collect(a, node.left)
       a.push(node.value)
-      for(let n of node.dups) {
+      for (let n of node.dups) {
         a.push(n)
       }
       collect(a, node.right)
@@ -109,5 +109,3 @@ export function avl<T>(cmp: (a: T, b: T) => number) {
     }
   }
 }
-
-
