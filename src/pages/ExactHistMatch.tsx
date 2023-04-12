@@ -13,11 +13,14 @@ export function ExcatHistMatch() {
     if (img) {
       const h = randomHist(img.width * img.height)
       console.time("exactHistMatch")
-      const r = exactHistMatch(img!, h, 1)
+      const r = exactHistMatch(img!, h, 4)
       console.timeEnd("exactHistMatch")
+      const r1 = exactHistMatch(img!, h, 1)
       return <div>
-        <HistBar hist={h.r} />
+        <HistBar hist={h} />
+        <ImagePreview image={img} />
         <ImagePreview image={r} />
+        <ImagePreview image={r1} />
         <HistBar image={r} />
       </div>
     }
@@ -42,5 +45,5 @@ function randomHist(total: number) {
     hist[i]++
     total--
   }
-  return { r: hist, g: hist, b: hist, all: hist }
+  return hist 
 }

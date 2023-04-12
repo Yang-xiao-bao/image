@@ -1,5 +1,4 @@
 import { Channel } from "../types/image";
-import { HistType } from "./hist";
 import { create } from './mat'
 
 const neighborMat = {
@@ -45,38 +44,44 @@ const neighbors: Record<4 | 8 | 13 | 21 | 25, (4 | 8 | 13 | 21 | 25)[]> = {
   25: [4, 8, 13, 21, 25]
 }
 
-export function exactHistMatch(img: ImageData, hist: Omit<HistType, 'all'>, k: 1 | 4 | 8 | 13 | 21 | 25) {
-  const r = ordering()
-  const g = ordering()
-  const b = ordering()
-
-  function getIndensity(x: number, y: number, c: Omit<Channel, 'all'>, k: 4 | 8 | 13 | 21 | 25) {
+/**
+* 只考虑灰度图,因为直接对RGB个分量进行处理,会导致颜色不一致
+* 对于RGB图，可以将其转换到HSL空间，然后对L分量进行处理，再转换回RGB空间
+* */
+export function exactHistMatch(img: ImageData, hist: Uint32Array, k: 1 | 4 | 8 | 13 | 21 | 25) {
+  type Data = {
+    x: number,
+    y: number,
+    weight: number,
+  }
+  const r = [] as Array<Data>;
+  /*
+    计算x,y处一个区域（由k指定）的平均亮度
+  */
+  function getIndensity(x: number, y: number, k: 4 | 8 | 13 | 21 | 25) {
     const neighbor = neighborMat[k]
     const center = Math.floor(neighbor.length / 2)
-    const offset = c === 'r' ? 0 : c === 'g' ? 1 : 2
     let sum = 0
     for (let ny = 0; ny < neighbor.length; ny++) {
       for (let nx = 0; nx < neighbor[ny].length; nx++) {
         const px = x + nx - center
         const py = y + ny - center
         if (px >= 0 && px < img.width && py >= 0 && py < img.height) {
-          const index = (py * img.width + px) * 4 + offset
+          const index = (py * img.width + px) * 4
           sum += img.data[index] * neighbor[ny][nx]
         }
       }
     }
     return sum
   }
-
-  function calcIndensities(x: number, y: number, c: Omit<Channel, 'all'>) {
-    const offset = c === 'r' ? 0 : c === 'g' ? 1 : 2
-    const index = (y * img.width + x) * 4 + offset
+  function calcIndensities(x: number, y: number) {
+    const index = (y * img.width + x) * 4
     const values = [img.data[index]]
     if (k > 1) {
       // @ts-ignore
       for (let k1 of neighbors[k]) {
         values.push(
-          getIndensity(x, y, c, k1)
+          getIndensity(x, y, k1)
         )
       }
     }
@@ -85,158 +90,34 @@ export function exactHistMatch(img: ImageData, hist: Omit<HistType, 'all'>, k: 1
 
   for (let x = 0; x < img.width; x++) {
     for (let y = 0; y < img.height; y++) {
-      r.insert({
+      r.push({
         x, y,
-        weight: calcWeight(calcIndensities(x, y, 'r'))
-      })
-      g.insert({
-        x, y,
-        weight: calcWeight(calcIndensities(x, y, 'g'))
-      })
-      b.insert({
-        x, y,
-        weight: calcWeight(calcIndensities(x, y, 'b'))
+        weight: calcWeight(calcIndensities(x, y))
       })
     }
   }
   const result = new ImageData(
     new Uint8ClampedArray(img.data),
     img.width, img.height)
+
   let rIndex = 0
-  let gIndex = 0
-  let bIndex = 0
-  const rOrdering = r.get()
-  const gOrdering = g.get()
-  const bOrdering = b.get()
+  const rOrdering = r.sort((a, b) => a.weight - b.weight)
+
   for (let i = 0; i < 256; i++) {
-    let count = hist.r[i]
+    let count = hist[i]
     while (count-- > 0) {
       const { x, y } = rOrdering[rIndex++]
       const rInd = (y * img.width + x) * 4
       result.data[rInd] = i
-    }
-    count = hist.g[i]
-    while (count-- > 0) {
-      const { x, y } = gOrdering[gIndex++]
-      const gInd = (y * img.width + x) * 4 + 1
-      result.data[gInd] = i
-    }
-    count = hist.b[i]
-    while (count-- > 0) {
-      const { x, y } = bOrdering[bIndex++]
-      const bInd = (y * img.width + x) * 4 + 2
-      result.data[bInd] = i
+      result.data[rInd + 1] = i
+      result.data[rInd + 2] = i
     }
   }
   return result
 }
-type Ordering = {
-  x: number,
-  y: number,
-  weight: number,
-}
-function ordering() {
-  type Node = {
-    weight: number,
-    height: number
-    value: { weight: number, x: number, y: number }
-    dups: { x: number, y: number }[]
-    left?: Node
-    right?: Node
-  }
-  let root: Node | undefined
-  function height(node: Node | undefined) {
-    return node?.height ?? 0
-  }
-  function create(value: Ordering, left?: Node, right?: Node): Node {
-    return {
-      height: Math.max(height(left), height(right)) + 1,
-      weight: value.weight,
-      left,
-      right,
-      dups: [],
-      value
-    }
-  }
-  function createByNode(value: Node, left?: Node, right?: Node) {
-    const n = create(value.value, left, right)
-    n.dups = value.dups
-    return n
-  }
-  function add(x: Ordering, tree?: Node): Node {
-    if (tree == null) {
-      return create(x)
-    }
-    if (tree.weight === x.weight) {
-      tree.dups.push(x)
-      return tree
-    } else if (x.weight < tree.weight) {
-      return bal(tree, add(x, tree.left), tree.right)
-    } else {
-      return bal(tree, tree.left, add(x, tree.right))
-    }
-  }
-  function bal(node: Node, left?: Node, right?: Node) {
-    const hl = height(left)
-    const hr = height(right)
-    if (hl > hr + 2) {
-      if (left && height(left.left) >= height(left.right)) {
-        return createByNode(left, left.left, createByNode(node, left.right, right))
-      }
-      if (left && left.right) {
-        return createByNode(left.right,
-          createByNode(left, left.left, left.right.left),
-          createByNode(node, left.right.right, right))
-      }
-      throw new Error('unreachable')
-    } else if (hr > hl + 2) {
-      if (right && height(right.right) >= height(right.left)) {
-        return createByNode(right,
-          createByNode(node, left, right.left), right.right)
-      }
-      if (right && right.left) {
-        return createByNode(right.left,
-          createByNode(node, left, right.left.left),
-          createByNode(right, right.left.right, right.right))
-      }
-      throw new Error('unreachable')
-    }
-    return createByNode(node, left, right)
-  }
-
-
-  function insert(o: Ordering) {
-    root = add(o, root)
-  }
-
-  function collect(node: Node, result: { x: number, y: number }[]) {
-    if (node.left !== undefined) {
-      collect(node.left, result)
-    }
-    result.push(node.value)
-    for (let n of node.dups) {
-      result.push(n)
-    }
-    if (node.right !== undefined) {
-      collect(node.right, result)
-    }
-  }
-
-
-  return {
-    insert,
-    getr: () => root,
-    get: () => {
-      const ordering: { x: number, y: number }[] = []
-      if (root !== undefined) {
-        collect(root, ordering)
-      }
-      return ordering
-    }
-  }
-}
 // 一组像素灰度
 function calcWeight(values: number[]) {
+  values = values.reverse()
   /**
    * weigh t = v[0] + v[1] * 2^8 + v[1] * 2^9 ...
    * */
