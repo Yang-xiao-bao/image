@@ -72,6 +72,9 @@ const App: Component = () => {
             <Link href="/hist-specification">
               直方图匹配
             </Link>
+            <Link href="/excat-hist-match">
+              精确匹配
+            </Link>
           </ListItem>
           <ListItem>
             <Link href="/local-hist-processing">
