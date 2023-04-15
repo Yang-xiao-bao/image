@@ -1,5 +1,5 @@
-import { Component, createMemo } from 'solid-js';
-import { Routes, Route, useLocation, Navigate, Link, useHref } from '@solidjs/router'
+import { children, Component, createMemo } from 'solid-js';
+import { Routes, Route, useLocation, Navigate, Link, useHref, useNavigate } from '@solidjs/router'
 import { Basic } from './pages/Basic';
 import { Grid, GridItem, List, ListItem, Tabs, Tab, TabList, TabPanel } from '@hope-ui/solid'
 import { CodeBlock } from './components/CodeBlock';
@@ -22,66 +22,13 @@ import { HistSpecification } from './pages/HistSpecification'
 import { LocalHistProcessing } from './pages/LocalHistProcessing';
 import localHistProcessingCode from './libs/localHist.ts.txt'
 import { ExcatHistMatch } from './pages/ExactHistMatch';
+import { TreeView } from './components/TreeView';
 
 const App: Component = () => {
   return (
-    <Grid h="100vh" templateColumns="300px 1fr" >
+    <Grid gap="10px" h="100vh" templateColumns="300px 1fr" >
       <GridItem>
-        <List>
-          <ListItem>
-            <Link href="/basic">
-              图像的绘制
-            </Link>
-          </ListItem>
-          <ListItem>
-            <Link href="/hist">
-              直方图
-            </Link>
-          </ListItem>
-          <ListItem>
-            <Link href="/statistics">
-              均值、方差
-            </Link>
-          </ListItem>
-          <ListItem>
-            <Link href="/gray">
-              去色
-            </Link>
-          </ListItem>
-          <ListItem>
-            <Link href="/adjust">
-              调整(imadjust)
-            </Link>
-          </ListItem>
-          <ListItem>
-            <Link href="/adjust-lines">
-              分段调整
-            </Link>
-          </ListItem>
-          <ListItem>
-            <Link href="/adjust-strechlim">
-              自动拉伸(imadjust)
-            </Link>
-          </ListItem>
-          <ListItem>
-            <Link href="/histeq">
-              直方图均衡(histeq)
-            </Link>
-          </ListItem>
-          <ListItem>
-            <Link href="/hist-specification">
-              直方图匹配
-            </Link>
-            <Link href="/excat-hist-match">
-              精确匹配
-            </Link>
-          </ListItem>
-          <ListItem>
-            <Link href="/local-hist-processing">
-              局部直方图处理
-            </Link>
-          </ListItem>
-        </List>
+        <Navigations />
       </GridItem>
       <GridItem>
         <Tabs class={style.tabs}>
@@ -115,6 +62,46 @@ const App: Component = () => {
     </Grid>
   );
 };
+
+function Navigations() {
+  const navigate = useNavigate()
+  return <TreeView<string>
+    onLeafClick={(item) => {
+      if (item.value === "") return
+      navigate(item.value)
+    }}
+    data={[
+      { name: "图像的绘制", value: "/basic" },
+      {
+        name: "直方图", value: "",
+        children: [
+          { name: "直方图", value: "/hist" },
+          { name: "统计量", value: "/statistics"}
+        ]
+      },
+      {
+        name: "灰度处理", value: "",
+        children: [
+          { name: "去色", value: "/gray" },
+          { name: "调整(imadjust)", value: "/adjust" },
+          { name: "分段调整", value: "/adjust-lines" },
+          { name: "自动", value: "/adjust-strechlim" },
+        ]
+      },
+      {
+
+        name: "直方图处理", value: "",
+        children: [
+          { name: "直方图均衡(histeq)", value: "/histeq" },
+          { name: "直方图匹配", value: "/hist-specification" },
+          { name: "精确匹配", value: "/excat-hist-match" },
+          { name: "局部直方图处理", value: "/local-hist-processing" },
+        ]
+      }
+
+    ]}
+  />
+}
 
 function ShowCode() {
   const code: Record<string, string> = {

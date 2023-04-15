@@ -1,0 +1,7 @@
+.subTree {
+  padding-left: 10px;
+}
+.node {
+  all:unset;
+  cursor: pointer;
+}
