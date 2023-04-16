@@ -8,7 +8,10 @@ import basic from './libs/show.ts.txt'
 import histCode from './libs/hist.ts.txt'
 import gray from './libs/gray.ts.txt'
 import imadjust from './libs/adjust.ts.txt'
+import adjustLines from './libs/adjustLines.ts.txt'
 import histEqCode from './libs/histeq.ts.txt'
+import histMatchCode from './libs/histMatch.ts.txt'
+import excatHistMatch from './libs/exactHistMatch.ts.txt'
 import strechlimCode from './libs/stretchlim.ts.txt'
 import statisticsCode from './libs/statistics.ts.txt'
 import { Gray } from './pages/Gray';
@@ -24,6 +27,8 @@ import localHistProcessingCode from './libs/localHist.ts.txt'
 import { ExcatHistMatch } from './pages/ExactHistMatch';
 import { TreeView } from './components/TreeView';
 import { Tabs } from './components/Tabs'
+import { histMatch } from './libs/histMatch';
+import { exactHistMatch } from './libs/exactHistMatch';
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果")
@@ -113,9 +118,11 @@ function ShowCode() {
     '/hist': histCode,
     '/gray': gray,
     '/adjust': imadjust,
+    '/adjust-lines': adjustLines,
     '/histeq': histEqCode,
+    '/hist-specification': histMatchCode,
+    '/excat-hist-match': excatHistMatch,
     '/adjust-strechlim': strechlimCode,
-    '/hist-specification': '',
     '/local-hist-processing': localHistProcessingCode,
     '/statistics': statisticsCode
   }
