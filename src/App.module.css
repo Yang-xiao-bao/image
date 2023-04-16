@@ -1,5 +1,4 @@
 .tabs {
-  height: 100%;
-  display: grid;
-  grid-template-rows: auto 1fr;
+  margin-bottom: 10px;
+  font-size: 115%;
 }

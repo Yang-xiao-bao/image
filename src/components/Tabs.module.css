@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  padding: 0;
+  gap: 10px;
+}
+.item {
+  --color: transparent;
+  display: block;
+  cursor: pointer;
+  border-bottom: 2px solid var(--color);
+  
+}
+.item:global(.selected) {
+  --color: var(--hope-colors-primary9,green);
+}

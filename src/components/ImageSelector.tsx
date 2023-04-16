@@ -45,7 +45,7 @@ export function ImageSelector(props: ImageSelectorProps) {
       [
         { label: 'Lena', urlOrName: lena },
         { label: 'Lena Gray', urlOrName: lenaGray },
-        { label: 'Dental Gray',urlOrName: tentalGray  }
+        { label: 'Dental Gray', urlOrName: tentalGray }
 
       ]
     )

@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal } from "solid-js"
+import { createEffect, createMemo, createSignal, onMount } from "solid-js"
 import { HistBar } from "../components/HistBar"
 import { ImagePreview } from "../components/ImagePreview"
 import { ImageSelector } from "../components/ImageSelector"
@@ -24,6 +24,9 @@ export function ExcatHistMatch() {
         <HistBar image={r} />
       </div>
     }
+  })
+  onMount(() => {
+    console.log("ExcatHistMatch onMount")
   })
 
   return <div>

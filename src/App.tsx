@@ -1,7 +1,7 @@
-import { children, Component, createMemo } from 'solid-js';
+import { Component, createMemo, createSignal, onMount, Show, Switch, Match } from 'solid-js';
 import { Routes, Route, useLocation, Navigate, Link, useHref, useNavigate } from '@solidjs/router'
 import { Basic } from './pages/Basic';
-import { Grid, GridItem, List, ListItem, Tabs, Tab, TabList, TabPanel } from '@hope-ui/solid'
+import { Grid, GridItem, List, ListItem } from '@hope-ui/solid'
 import { CodeBlock } from './components/CodeBlock';
 import { Hist } from './pages/Hist';
 import basic from './libs/show.ts.txt'
@@ -23,20 +23,24 @@ import { LocalHistProcessing } from './pages/LocalHistProcessing';
 import localHistProcessingCode from './libs/localHist.ts.txt'
 import { ExcatHistMatch } from './pages/ExactHistMatch';
 import { TreeView } from './components/TreeView';
+import { Tabs } from './components/Tabs'
 
 const App: Component = () => {
+  const [tab, setTab] = createSignal("效果")
   return (
     <Grid gap="10px" h="100vh" templateColumns="300px 1fr" >
       <GridItem>
         <Navigations />
       </GridItem>
       <GridItem>
-        <Tabs class={style.tabs}>
-          <TabList>
-            <Tab>效果</Tab>
-            <Tab>关键代码</Tab>
-          </TabList>
-          <TabPanel>
+        <Tabs
+          class={style.tabs}
+          tabs={["效果", "关键代码"]}
+          selected={tab()}
+          onChange={setTab}
+        />
+        <Switch fallback={<div>No Matched</div>}>
+          <Match when={tab() === "效果"}>
             <Routes>
               <Route path="/basic"
                 component={Basic}
@@ -53,11 +57,11 @@ const App: Component = () => {
               <Route path="/statistics" component={Statistics} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
-          </TabPanel>
-          <TabPanel>
+          </Match>
+          <Match when={tab() === "关键代码"}>
             <ShowCode />
-          </TabPanel>
-        </Tabs>
+          </Match>
+        </Switch>
       </GridItem>
     </Grid>
   );
@@ -76,7 +80,7 @@ function Navigations() {
         name: "直方图", value: "",
         children: [
           { name: "直方图", value: "/hist" },
-          { name: "统计量", value: "/statistics"}
+          { name: "统计量", value: "/statistics" }
         ]
       },
       {
