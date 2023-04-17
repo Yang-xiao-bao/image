@@ -21,14 +21,14 @@
   grid-area: origin;
   display:flex;
   align-items:center;
-  justify-conent:center;
+  justify-content:center;
   background-color: var(--hope-colors-primary4);
 }
 .result {
   grid-area: result;
   display:flex;
   align-items:center;
-  justify-conent:center;
+  justify-content:center;
   background-color: var(--hope-colors-primary4);
 }
 .redChannel {
