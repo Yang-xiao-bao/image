@@ -14,6 +14,8 @@ import histMatchCode from './libs/histMatch.ts.txt'
 import excatHistMatch from './libs/exactHistMatch.ts.txt'
 import strechlimCode from './libs/stretchlim.ts.txt'
 import statisticsCode from './libs/statistics.ts.txt'
+import convolveCode from './libs/convolve.ts.txt'
+import boxFilterCode from './libs/box-filter.ts.txt'
 import { Gray } from './pages/Gray';
 import style from './App.module.css'
 import { Adjust } from './pages/Adjust';
@@ -27,8 +29,7 @@ import localHistProcessingCode from './libs/localHist.ts.txt'
 import { ExcatHistMatch } from './pages/ExactHistMatch';
 import { TreeView } from './components/TreeView';
 import { Tabs } from './components/Tabs'
-import { histMatch } from './libs/histMatch';
-import { exactHistMatch } from './libs/exactHistMatch';
+import { BoxFilter } from './pages/BoxFilter';
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果")
@@ -60,6 +61,7 @@ const App: Component = () => {
               <Route path="/local-hist-processing" component={LocalHistProcessing} />
               <Route path="/excat-hist-match" component={ExcatHistMatch} />
               <Route path="/statistics" component={Statistics} />
+              <Route path="/box-filter" component={BoxFilter} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -98,13 +100,18 @@ function Navigations() {
         ]
       },
       {
-
         name: "直方图处理", value: "",
         children: [
           { name: "直方图均衡(histeq)", value: "/histeq" },
           { name: "直方图匹配", value: "/hist-specification" },
           { name: "精确匹配", value: "/excat-hist-match" },
           { name: "局部直方图处理", value: "/local-hist-processing" },
+        ]
+      },
+      {
+        name: "空间滤波", value: "",
+        children: [
+          { name: "盒试滤波器", value: "/box-filter" }
         ]
       }
 
@@ -113,7 +120,7 @@ function Navigations() {
 }
 
 function ShowCode() {
-  const code: Record<string, string> = {
+  const code: Record<string, string | Array<{ name: string, url: string }>> = {
     '/basic': basic,
     '/hist': histCode,
     '/gray': gray,
@@ -124,13 +131,35 @@ function ShowCode() {
     '/excat-hist-match': excatHistMatch,
     '/adjust-strechlim': strechlimCode,
     '/local-hist-processing': localHistProcessingCode,
-    '/statistics': statisticsCode
+    '/statistics': statisticsCode,
+    '/box-filter': [{ name: "convolve.ts", url: convolveCode }, { name: 'boxFilter.ts', url: boxFilterCode }]
   }
   const location = useLocation()
-
-  return <>
-    <CodeBlock url={code[location.pathname.replace(/^\/image/, '')]} />
-  </>
+  const codeBlock = createMemo(() => {
+    const url = code[location.pathname.replace(/^\/image/, '')]
+    if (typeof url === "string") {
+      return <CodeBlock url={url} />
+    } else {
+      return <CodeBlocks files={url} />
+    }
+  })
+  return codeBlock
+}
+function CodeBlocks(props: { files: Array<{ name: string, url: string }> }) {
+  const [tab, setTab] = createSignal(props.files[0])
+  return <div>
+    <Tabs
+      class={style.tabs}
+      tabs={props.files.map(f => f.name)}
+      selected={tab().name}
+      onChange={t =>
+        setTab(
+          props.files.find(f => f.name === t)!
+        )
+      }
+    />
+    <CodeBlock url={tab().url} />
+  </div>
 }
 
 export default App;
