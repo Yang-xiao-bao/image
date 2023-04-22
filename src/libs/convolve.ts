@@ -15,9 +15,11 @@ export function convolve(
   const cx = Math.floor(kernelWidth / 2);
   const cy = Math.floor(kernelHeight / 2);
 
+  let centerMaxX = img.width - Math.ceil(kernelWidth / 2)
+  let centerMaxY = img.height - Math.ceil(kernelHeight / 2)
   // center
-  for (let x = cx; x < img.width - cx; x++) {
-    for (let y = cy; y < img.height - cy; y++) {
+  for (let x = cx; x <= centerMaxX; x++) {
+    for (let y = cy; y <= centerMaxY ; y++) {
       let r = 0;
       let g = 0;
       let b = 0;
@@ -71,8 +73,9 @@ export function convolve(
     }
   }
   // bottom
+  let yStart = img.height - (Math.ceil(kernelHeight / 2) - 1)
   for (let x = 0; x < img.width; x++) {
-    for (let y = img.height - cy; y < img.height; y++) {
+    for (let y = yStart; y < img.height; y++) {
       let r = 0;
       let g = 0;
       let b = 0;
@@ -101,7 +104,7 @@ export function convolve(
   }
   // left
   for (let x = 0; x < cx; x++) {
-    for (let y = cy; y < img.height - cy; y++) {
+    for (let y = cy; y < yStart; y++) {
       let r = 0;
       let g = 0;
       let b = 0;
@@ -130,8 +133,8 @@ export function convolve(
     }
   }
   // right
-  for (let x = img.width - cx; x < img.width; x++) {
-    for (let y = cy; y < img.height - cy; y++) {
+  for (let x = centerMaxX + 1; x < img.width; x++) {
+    for (let y = cy; y < yStart; y++) {
       let r = 0;
       let g = 0;
       let b = 0;
