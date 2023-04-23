@@ -15,6 +15,7 @@ import excatHistMatch from './libs/exactHistMatch.ts.txt'
 import strechlimCode from './libs/stretchlim.ts.txt'
 import statisticsCode from './libs/statistics.ts.txt'
 import convolveCode from './libs/convolve.ts.txt'
+import asyncConvolveCode from './libs/asyncConvolve.ts.txt'
 import boxFilterCode from './libs/box-filter.ts.txt'
 import { Gray } from './pages/Gray';
 import style from './App.module.css'
@@ -30,6 +31,8 @@ import { ExcatHistMatch } from './pages/ExactHistMatch';
 import { TreeView } from './components/TreeView';
 import { Tabs } from './components/Tabs'
 import { BoxFilter } from './pages/BoxFilter';
+import { AsyncConvolve } from './pages/AsyncConvolve'
+import { asyncConvolve } from './libs/asyncConvolve';
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果")
@@ -62,6 +65,7 @@ const App: Component = () => {
               <Route path="/excat-hist-match" component={ExcatHistMatch} />
               <Route path="/statistics" component={Statistics} />
               <Route path="/box-filter" component={BoxFilter} />
+              <Route path="/async" component={AsyncConvolve} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -111,7 +115,8 @@ function Navigations() {
       {
         name: "空间滤波", value: "",
         children: [
-          { name: "盒试滤波器", value: "/box-filter" }
+          { name: "盒试滤波器", value: "/box-filter" },
+          { name: "异步滤波器", value: "/async" },
         ]
       }
 
@@ -132,7 +137,8 @@ function ShowCode() {
     '/adjust-strechlim': strechlimCode,
     '/local-hist-processing': localHistProcessingCode,
     '/statistics': statisticsCode,
-    '/box-filter': [{ name: "convolve.ts", url: convolveCode }, { name: 'boxFilter.ts', url: boxFilterCode }]
+    '/box-filter': [{ name: "convolve.ts", url: convolveCode }, { name: 'boxFilter.ts', url: boxFilterCode }],
+    '/async': asyncConvolveCode
   }
   const location = useLocation()
   const codeBlock = createMemo(() => {

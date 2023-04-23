@@ -1,25 +1,23 @@
-export function convolve(
+export type Control = 'continue' | 'halt'
+export function* asyncConvolve(
   img: ImageData,
-  /**
-* [
-*  [0, 1, 0],
-*  [1, 1, 1],
-*  [0, 1, 0]
-* ]
-* */
-  kernel: number[][],
-) {
+  kernel: number[][]) {
+
+  let counter = 0
   const result = new ImageData(img.width, img.height);
   const kernelWidth = kernel[0].length;
   const kernelHeight = kernel.length;
+  const size = img.width * img.height //(img.width + (kernelWidth-1)) * (img.height + (kernelHeight-1))
+  const STEP = ~~(size * 0.01)
   const cx = Math.floor(kernelWidth / 2);
   const cy = Math.floor(kernelHeight / 2);
 
+  // center
+  //let maxX = img.width-1 - Math.ceil(kernelWidth/2)+1
   let centerMaxX = img.width - Math.ceil(kernelWidth / 2)
   let centerMaxY = img.height - Math.ceil(kernelHeight / 2)
-  // center
   for (let x = cx; x <= centerMaxX; x++) {
-    for (let y = cy; y <= centerMaxY ; y++) {
+    for (let y = cy; y <= centerMaxY; y++) {
       let r = 0;
       let g = 0;
       let b = 0;
@@ -41,6 +39,10 @@ export function convolve(
       result.data[ind + 1] = g;
       result.data[ind + 2] = b;
       result.data[ind + 3] = 255;
+      if (++counter % STEP === 0) {
+        const control: Control = yield (counter / size)
+        if (control === 'halt') return
+      }
     }
   }
   //top
@@ -70,6 +72,10 @@ export function convolve(
       result.data[ind + 1] = g;
       result.data[ind + 2] = b;
       result.data[ind + 3] = 255;
+      if (++counter % STEP === 0) {
+        const control: Control = yield (counter / size)
+        if (control === 'halt') return
+      }
     }
   }
   // bottom
@@ -100,6 +106,10 @@ export function convolve(
       result.data[ind + 1] = g;
       result.data[ind + 2] = b;
       result.data[ind + 3] = 255;
+      if (++counter % STEP === 0) {
+        const control: Control = yield (counter / size)
+        if (control === 'halt') return
+      }
     }
   }
   // left
@@ -129,6 +139,10 @@ export function convolve(
       result.data[ind + 1] = g;
       result.data[ind + 2] = b;
       result.data[ind + 3] = 255;
+      if (++counter % STEP === 0) {
+        const control: Control = yield (counter / size)
+        if (control === 'halt') return
+      }
 
     }
   }
@@ -159,10 +173,49 @@ export function convolve(
       result.data[ind + 1] = g;
       result.data[ind + 2] = b;
       result.data[ind + 3] = 255;
-
+      if (++counter % STEP === 0) {
+        const control: Control = yield (counter / size)
+        if (control === 'halt') return
+      }
     }
   }
-
-
+  yield 1
   return result
+}
+
+export type AsyncConvolveRunner = {
+  start(onProgress?: (progress: number) => void): Promise<ImageData | null>
+  stop(): void
+}
+export function run(img: ImageData, kernel: number[][]): AsyncConvolveRunner {
+  let stopSignal = false
+  let timer = -1
+  return {
+    start(onProgress?: (progress: number) => void) {
+      stopSignal = false
+      const generator = asyncConvolve(img, kernel)
+      return new Promise<ImageData | null>((resolve, reject) => {
+        const schedule = () => {
+          timer = setTimeout(() => {
+            const { value, done } = generator.next(stopSignal ? 'halt' : 'continue')
+            if (!done) {
+              onProgress?.(value)
+              schedule()
+            } else {
+              if (value) {
+                resolve(value)
+              } else {
+                resolve(null)
+              }
+            }
+          })
+        }
+        schedule()
+      })
+    },
+    stop() {
+      stopSignal = true
+      clearTimeout(timer)
+    }
+  }
 }
