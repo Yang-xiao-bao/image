@@ -15,7 +15,6 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 }
 
 render(() => {
-  console.log("RRR")
   return <HopeProvider>
     <Router base="image" ><App /></Router>
   </HopeProvider>

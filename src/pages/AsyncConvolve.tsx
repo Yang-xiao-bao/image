@@ -9,7 +9,7 @@ import { convolve } from "../libs/convolve";
 import style from './BoxFilter.module.css'
 
 export function AsyncConvolve() {
-  const [size, setSize] = createSignal(21)
+  const [size, setSize] = createSignal(20)
   const [img, setImage] = createSignal<ImageData>()
   const [result, progress, process] = useAsyncConvolve()
   createEffect(() => {
