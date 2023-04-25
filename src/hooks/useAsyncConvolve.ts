@@ -1,9 +1,10 @@
 import { createSignal } from "solid-js";
 import { AsyncConvolveRunner, run } from "../libs/asyncConvolve";
+import { FloatImageData } from "../libs/image";
 
 export function useAsyncConvolve() {
   let runner: AsyncConvolveRunner | null = null
-  const [img, setImage] = createSignal<ImageData | null>(null)
+  const [img, setImage] = createSignal<FloatImageData | null>(null)
   const [progress, setProgress] = createSignal(0)
   return [
     img,

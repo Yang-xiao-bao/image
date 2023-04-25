@@ -1,10 +1,16 @@
+import { FloatImageData } from "./image";
+
 export type Control = 'continue' | 'halt'
 export function* asyncConvolve(
-  img: ImageData,
+  img: ImageData | FloatImageData,
   kernel: number[][]) {
 
   let counter = 0
-  const result = new ImageData(img.width, img.height);
+  const result:FloatImageData = {
+    width: img.width,
+    height: img.height,
+    data: new Float32Array(img.width * img.height * 4)
+  }
   const kernelWidth = kernel[0].length;
   const kernelHeight = kernel.length;
   const size = img.width * img.height //(img.width + (kernelWidth-1)) * (img.height + (kernelHeight-1))
@@ -184,7 +190,7 @@ export function* asyncConvolve(
 }
 
 export type AsyncConvolveRunner = {
-  start(onProgress?: (progress: number) => void): Promise<ImageData | null>
+  start(onProgress?: (progress: number) => void): Promise<FloatImageData | null>
   stop(): void
 }
 export function run(img: ImageData, kernel: number[][]): AsyncConvolveRunner {
@@ -194,7 +200,7 @@ export function run(img: ImageData, kernel: number[][]): AsyncConvolveRunner {
     start(onProgress?: (progress: number) => void) {
       stopSignal = false
       const generator = asyncConvolve(img, kernel)
-      return new Promise<ImageData | null>((resolve, reject) => {
+      return new Promise<FloatImageData | null>((resolve, reject) => {
         const schedule = () => {
           timer = setTimeout(() => {
             const { value, done } = generator.next(stopSignal ? 'halt' : 'continue')
