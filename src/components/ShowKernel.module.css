@@ -1,0 +1,14 @@
+.body {
+  overflow: auto;
+}
+.dialog {
+  max-width: 80vw;
+  max-height: 80vh;
+}
+.body table {
+  border-collapse: collapse;
+}
+.body table td {
+  border: 1px solid #ccc;
+  padding: 0.5em;
+}

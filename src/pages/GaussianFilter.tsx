@@ -1,9 +1,8 @@
 import { Input, InputGroup, InputLeftAddon, Progress, ProgressIndicator } from "@hope-ui/solid";
-import { createMemoObject } from "@solidjs/router/dist/utils";
 import { createEffect, createMemo, createSignal } from "solid-js";
 import { ImagePreview } from "../components/ImagePreview";
 import { ImageSelector } from "../components/ImageSelector";
-import { useAsyncConvolve } from "../hooks/useAsyncConvolve";
+import { ShowKernel } from "../components/ShowKernel";
 import { useSeparableConvolve } from "../hooks/useSeparableConvolve";
 import { gaussianFilter } from '../libs/gaussian'
 import style from './BoxFilter.module.css'
@@ -47,6 +46,7 @@ export function GaussianFilter() {
         }}
       />
     </InputGroup>
+    <ShowKernel title="高斯滤波器" kernel={kernel()} />
     <div class={style.container}>
       {createMemo(() => {
         const image = img()
