@@ -51,6 +51,7 @@ import { BoxFilter } from "./pages/BoxFilter";
 import { AsyncConvolve } from "./pages/AsyncConvolve";
 import { SeparableConvolve } from "./pages/SeparableConvolve";
 import { GaussianFilter } from './pages/GaussianFilter'
+import { GaussianVsBox } from './pages/GaussianVsBox'
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -87,6 +88,7 @@ const App: Component = () => {
               <Route path="/async" component={AsyncConvolve} />
               <Route path="/separable" component={SeparableConvolve} />
               <Route path="/gaussian-filter" component={GaussianFilter} />
+              <Route path="/gaussian-vs-box" component={GaussianVsBox} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -144,7 +146,8 @@ function Navigations() {
             { name: "盒试滤波器", value: "/box-filter" },
             { name: "异步滤波器", value: "/async" },
             { name: "可分离滤波核", value: "/separable" },
-            { name: "高斯滤波器", value: "/gaussian-filter"}
+            { name: "高斯滤波器", value: "/gaussian-filter" },
+            { name: "高斯vs盒式", value:"/gaussian-vs-box" }
           ],
         },
       ]}
