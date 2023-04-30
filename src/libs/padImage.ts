@@ -15,9 +15,9 @@ export function padImage<T extends FloatImageData | ImageData>(img: T,
       ? new ImageData(paddedWidth, paddedHeight)
       : { width: paddedWidth, height: paddedHeight, data: new Float32Array(paddedWidth * paddedHeight * 4) }
   for (let row = 0; row < paddedHeight; row++) {
-    const y = row - cx
+    const y = row - cy
     for (let col = 0; col < paddedWidth; col++) {
-      const x = col - cy
+      const x = col - cx
       if (x >= 0 && x < img.width) {
         if (y >= 0 && y < img.height) {
           padded.data[(row * padded.width + col) * 4] =
