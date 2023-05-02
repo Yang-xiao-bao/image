@@ -1,6 +1,7 @@
 import { asyncConvolve } from "./asyncConvolve";
 import { Control } from './runner'
 import * as math from 'mathjs'
+import { toImageData } from "./image";
 
 export function* convolve(
   img: ImageData,
@@ -51,11 +52,11 @@ function split(kernel: number[][]) {
     while (colIdx < height) {
       rowIdx = 0
       while (rowIdx < width) {
-        rowIdx++;
         if (kernel[colIdx][rowIdx] !== 0) {
           nonZero = true
           break outer;
         }
+        rowIdx++;
       }
       colIdx++
     }

@@ -6,10 +6,11 @@ import { toImageData } from "./image";
 export function* convolve(
   img: ImageData,
   kernel: number[][],
+  padding: 'zero' | 'replicate'
 ) {
   const splited = split(kernel)
   if (splited) {
-    let it = asyncConvolve(img, splited.rowKernel);
+    let it = asyncConvolve(img, splited.rowKernel, padding);
     let progress = 0
     let r = it.next(yield progress)
 
@@ -21,7 +22,7 @@ export function* convolve(
       }
       r = it.next(yield progress * 0.5)
     }
-    it = asyncConvolve(r.value!, splited.colKernel);
+    it = asyncConvolve(r.value!, splited.colKernel, padding);
     r = it.next(yield 0.5)
     while (true) {
       if (r.done) {

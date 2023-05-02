@@ -1,12 +1,15 @@
 import { FloatImageData } from "./image";
+import { padImage } from "./padImage";
 
 export type Control = 'continue' | 'halt'
 export function* asyncConvolve(
   img: ImageData | FloatImageData,
-  kernel: number[][]) {
+  kernel: number[][],
+  padding: 'zero' | 'replicate' = 'zero'
+) {
 
   let counter = 0
-  const result:FloatImageData = {
+  const result: FloatImageData = {
     width: img.width,
     height: img.height,
     data: new Float32Array(img.width * img.height * 4)
@@ -17,30 +20,33 @@ export function* asyncConvolve(
   const STEP = ~~(size * 0.01)
   const cx = Math.floor(kernelWidth / 2);
   const cy = Math.floor(kernelHeight / 2);
-
-  // center
-  //let maxX = img.width-1 - Math.ceil(kernelWidth/2)+1
-  let centerMaxX = img.width - Math.ceil(kernelWidth / 2)
-  let centerMaxY = img.height - Math.ceil(kernelHeight / 2)
-  for (let x = cx; x <= centerMaxX; x++) {
-    for (let y = cy; y <= centerMaxY; y++) {
+  const paddedWidth = img.width + kernelWidth - 1;
+  const paddedHeight = img.height + kernelHeight - 1;
+  const padded: ImageData | FloatImageData = padImage(
+    img,
+    kernelWidth,
+    kernelHeight,
+    padding
+  )
+  for (let row = 0; row < result.height; row++) {
+    for (let col = 0; col < result.width; col++) {
       let r = 0;
       let g = 0;
       let b = 0;
-
       for (let kx = 0; kx < kernelWidth; kx++) {
         for (let ky = 0; ky < kernelHeight; ky++) {
-          // cx,cy 与 x y 对齐
-          const px = x + kx - cx
-          const py = y + ky - cy
-          const ind = (py * img.width + px) * 4
+          const px = col + kx//+ cx
+          const py = row + ky //+ cy
+          const ind = (py * padded.width + px) * 4
           const k = kernel[kernelHeight - ky - 1][kernelWidth - kx - 1]
-          r += img.data[ind + 0] * k
-          g += img.data[ind + 1] * k
-          b += img.data[ind + 2] * k
+          //const k = kernel[ky][kx]
+          r += padded.data[ind + 0] * k
+          g += padded.data[ind + 1] * k
+          b += padded.data[ind + 2] * k
         }
       }
-      const ind = (y * img.width + x) * 4
+
+      const ind = (row * result.width + col) * 4
       result.data[ind + 0] = r;
       result.data[ind + 1] = g;
       result.data[ind + 2] = b;
@@ -51,140 +57,7 @@ export function* asyncConvolve(
       }
     }
   }
-  //top
-  for (let x = 0; x < img.width; x++) {
-    for (let y = 0; y < cy; y++) {
-      let r = 0;
-      let g = 0;
-      let b = 0;
 
-      for (let kx = 0; kx < kernelWidth; kx++) {
-        for (let ky = 0; ky < kernelHeight; ky++) {
-          // cx,cy 与 x y 对齐
-          const px = x + kx - cx
-          const py = y + ky - cy
-          const ind = (py * img.width + px) * 4
-          const k = kernel[kernelHeight - ky - 1][kernelWidth - kx - 1]
-          if (px < 0 || px >= img.width || py < 0 || py >= img.height) {
-            continue
-          }
-          r += img.data[ind + 0] * k
-          g += img.data[ind + 1] * k
-          b += img.data[ind + 2] * k
-        }
-      }
-      const ind = (y * img.width + x) * 4
-      result.data[ind + 0] = r;
-      result.data[ind + 1] = g;
-      result.data[ind + 2] = b;
-      result.data[ind + 3] = 255;
-      if (++counter % STEP === 0) {
-        const control: Control = yield (counter / size)
-        if (control === 'halt') return
-      }
-    }
-  }
-  // bottom
-  let yStart = img.height - (Math.ceil(kernelHeight / 2) - 1)
-  for (let x = 0; x < img.width; x++) {
-    for (let y = yStart; y < img.height; y++) {
-      let r = 0;
-      let g = 0;
-      let b = 0;
-
-      for (let kx = 0; kx < kernelWidth; kx++) {
-        for (let ky = 0; ky < kernelHeight; ky++) {
-          // cx,cy 与 x y 对齐
-          const px = x + kx - cx
-          const py = y + ky - cy
-          const ind = (py * img.width + px) * 4
-          const k = kernel[kernelHeight - ky - 1][kernelWidth - kx - 1]
-          if (px < 0 || px >= img.width || py < 0 || py >= img.height) {
-            continue
-          }
-          r += img.data[ind + 0] * k
-          g += img.data[ind + 1] * k
-          b += img.data[ind + 2] * k
-        }
-      }
-      const ind = (y * img.width + x) * 4
-      result.data[ind + 0] = r;
-      result.data[ind + 1] = g;
-      result.data[ind + 2] = b;
-      result.data[ind + 3] = 255;
-      if (++counter % STEP === 0) {
-        const control: Control = yield (counter / size)
-        if (control === 'halt') return
-      }
-    }
-  }
-  // left
-  for (let x = 0; x < cx; x++) {
-    for (let y = cy; y < yStart; y++) {
-      let r = 0;
-      let g = 0;
-      let b = 0;
-
-      for (let kx = 0; kx < kernelWidth; kx++) {
-        for (let ky = 0; ky < kernelHeight; ky++) {
-          // cx,cy 与 x y 对齐
-          const px = x + kx - cx
-          const py = y + ky - cy
-          const ind = (py * img.width + px) * 4
-          const k = kernel[kernelHeight - ky - 1][kernelWidth - kx - 1]
-          if (px < 0) {
-            continue
-          }
-          r += img.data[ind + 0] * k
-          g += img.data[ind + 1] * k
-          b += img.data[ind + 2] * k
-        }
-      }
-      const ind = (y * img.width + x) * 4
-      result.data[ind + 0] = r;
-      result.data[ind + 1] = g;
-      result.data[ind + 2] = b;
-      result.data[ind + 3] = 255;
-      if (++counter % STEP === 0) {
-        const control: Control = yield (counter / size)
-        if (control === 'halt') return
-      }
-
-    }
-  }
-  // right
-  for (let x = centerMaxX + 1; x < img.width; x++) {
-    for (let y = cy; y < yStart; y++) {
-      let r = 0;
-      let g = 0;
-      let b = 0;
-
-      for (let kx = 0; kx < kernelWidth; kx++) {
-        for (let ky = 0; ky < kernelHeight; ky++) {
-          // cx,cy 与 x y 对齐
-          const px = x + kx - cx
-          const py = y + ky - cy
-          const ind = (py * img.width + px) * 4
-          const k = kernel[kernelHeight - ky - 1][kernelWidth - kx - 1]
-          if (px >= img.width) {
-            continue
-          }
-          r += img.data[ind + 0] * k
-          g += img.data[ind + 1] * k
-          b += img.data[ind + 2] * k
-        }
-      }
-      const ind = (y * img.width + x) * 4
-      result.data[ind + 0] = r;
-      result.data[ind + 1] = g;
-      result.data[ind + 2] = b;
-      result.data[ind + 3] = 255;
-      if (++counter % STEP === 0) {
-        const control: Control = yield (counter / size)
-        if (control === 'halt') return
-      }
-    }
-  }
   yield 1
   return result
 }

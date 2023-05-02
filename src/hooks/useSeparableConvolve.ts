@@ -9,9 +9,11 @@ export function useSeparableConvolve() {
   return [
     img,
     progress,
-    (img: ImageData, kernel: number[][]) => {
+    (img: ImageData, kernel: number[][],
+      padding: 'zero' | 'replicate' = 'replicate'
+    ) => {
       if (runner) runner.stop()
-      runner = run(convolve, img, kernel)
+      runner = run(convolve, img, kernel, padding)
       runner.start(setProgress)
         .then(setImage)
     }
