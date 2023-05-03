@@ -5,23 +5,20 @@ export type Control = 'continue' | 'halt'
 export function* asyncConvolve(
   img: ImageData | FloatImageData,
   kernel: number[][],
-  padding: 'zero' | 'replicate' = 'zero'
+  padding: 'zero' | 'replicate' = 'replicate'
 ) {
 
   let counter = 0
   const result: FloatImageData = {
     width: img.width,
     height: img.height,
-    data: new Float32Array(img.width * img.height * 4)
+    data: new Float32Array(img.width * img.height * 4),
+    hit:'remap'
   }
   const kernelWidth = kernel[0].length;
   const kernelHeight = kernel.length;
   const size = img.width * img.height //(img.width + (kernelWidth-1)) * (img.height + (kernelHeight-1))
   const STEP = ~~(size * 0.01)
-  const cx = Math.floor(kernelWidth / 2);
-  const cy = Math.floor(kernelHeight / 2);
-  const paddedWidth = img.width + kernelWidth - 1;
-  const paddedHeight = img.height + kernelHeight - 1;
   const padded: ImageData | FloatImageData = padImage(
     img,
     kernelWidth,
@@ -35,11 +32,11 @@ export function* asyncConvolve(
       let b = 0;
       for (let kx = 0; kx < kernelWidth; kx++) {
         for (let ky = 0; ky < kernelHeight; ky++) {
-          const px = col + kx//+ cx
-          const py = row + ky //+ cy
+          const px = col + kx
+          const py = row + ky
           const ind = (py * padded.width + px) * 4
-          const k = kernel[kernelHeight - ky - 1][kernelWidth - kx - 1]
-          //const k = kernel[ky][kx]
+          //const k = kernel[kernelHeight - ky - 1][kernelWidth - kx - 1]
+          const k = kernel[ky][kx]
           r += padded.data[ind + 0] * k
           g += padded.data[ind + 1] * k
           b += padded.data[ind + 2] * k

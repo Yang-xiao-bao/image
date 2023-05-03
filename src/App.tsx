@@ -52,6 +52,12 @@ import { AsyncConvolve } from "./pages/AsyncConvolve";
 import { SeparableConvolve } from "./pages/SeparableConvolve";
 import { GaussianFilter } from './pages/GaussianFilter'
 import { GaussianVsBox } from './pages/GaussianVsBox'
+import { ShadowRemoval } from "./pages/ShadowRemoval";
+import { Padding } from './pages/Padding'
+import { Laplacian } from "./pages/Laplacian"
+import laplacianFilterCode from "./libs/laplacian.ts.txt"
+import arithmetical from "./libs/arithmetical.ts.txt"
+import gaussianFilterCode from "./libs/gaussian.ts.txt"
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -89,6 +95,9 @@ const App: Component = () => {
               <Route path="/separable" component={SeparableConvolve} />
               <Route path="/gaussian-filter" component={GaussianFilter} />
               <Route path="/gaussian-vs-box" component={GaussianVsBox} />
+              <Route path="/shadow-removal" component={ShadowRemoval} />
+              <Route path="/padding" component={Padding} />
+              <Route path="/laplacian-filter" component={Laplacian} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -147,7 +156,9 @@ function Navigations() {
             { name: "异步滤波器", value: "/async" },
             { name: "可分离滤波核", value: "/separable" },
             { name: "高斯滤波器", value: "/gaussian-filter" },
-            { name: "高斯vs盒式", value:"/gaussian-vs-box" }
+            { name: "高斯vs盒式", value: "/gaussian-vs-box" },
+            { name: "阴影矫正", value: "/shadow-removal" },
+            { name: "拉普拉斯滤波器核", value: "/laplacian-filter" }
           ],
         },
       ]}
@@ -174,6 +185,17 @@ function ShowCode() {
     ],
     "/async": asyncConvolveCode,
     "/separable": separableKernelCode,
+    "/gaussian-filter": [
+      { name: "gaussian.ts", url: gaussianFilterCode },
+      { name: "asyncConvolve.ts", url: asyncConvolveCode },
+      { name: "separableKernel.ts", url: separableKernelCode },
+    ],
+    "/shadow-removal": [
+      { name: "gaussian.ts", url: gaussianFilterCode },
+      { name: "asyncConvolve.ts", url: asyncConvolveCode },
+      { name: "arithmetical.ts", url: arithmetical },
+    ],
+    "/laplacian-filter": laplacianFilterCode
   };
   const location = useLocation();
   const codeBlock = createMemo(() => {
