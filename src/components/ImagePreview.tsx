@@ -16,6 +16,9 @@ export function ImagePreview(props: ImagePreviewProps) {
   const [pos, setPos] = createSignal<[number, number] | null>()
   const canvas = <canvas
     class={props.class + ' ' + style.canvas}
+    style={{
+      display: 'inline'
+    }}
     onMouseMove={e => {
       const x = e.offsetX / e.currentTarget.clientWidth
       const y = e.offsetY / e.currentTarget.clientHeight
@@ -58,9 +61,11 @@ export function ImagePreview(props: ImagePreviewProps) {
 
   return <div class={style.container}>
     <Text>{props.title}</Text>
-    {canvas}
-    <div class={style.rgb} style={rgbStyle()}>
-      {rgb}
-    </div>
+    <span style={{position:'relative'}}>
+      {canvas}
+      <div class={style.rgb} style={rgbStyle()}>
+        {rgb()}
+      </div>
+    </span>
   </div>
 }
