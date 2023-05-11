@@ -55,9 +55,11 @@ import { GaussianVsBox } from './pages/GaussianVsBox'
 import { ShadowRemoval } from "./pages/ShadowRemoval";
 import { Padding } from './pages/Padding'
 import { Laplacian } from "./pages/Laplacian"
+import { LaplacianSharpening } from "./pages/LaplacianSharpening"
 import laplacianFilterCode from "./libs/laplacian.ts.txt"
 import arithmetical from "./libs/arithmetical.ts.txt"
 import gaussianFilterCode from "./libs/gaussian.ts.txt"
+import laplacianSharpeningCode from "./libs/laplacianSharpening.ts.txt"
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -98,6 +100,7 @@ const App: Component = () => {
               <Route path="/shadow-removal" component={ShadowRemoval} />
               <Route path="/padding" component={Padding} />
               <Route path="/laplacian-filter" component={Laplacian} />
+              <Route path="/laplacian-sharpening" component={LaplacianSharpening} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -158,7 +161,8 @@ function Navigations() {
             { name: "高斯滤波器", value: "/gaussian-filter" },
             { name: "高斯vs盒式", value: "/gaussian-vs-box" },
             { name: "阴影矫正", value: "/shadow-removal" },
-            { name: "拉普拉斯滤波器核", value: "/laplacian-filter" }
+            { name: "拉普拉斯滤波器核", value: "/laplacian-filter" },
+            { name: "锐化(拉普拉斯)", value: "/laplacian-sharpening" }
           ],
         },
       ]}
@@ -195,7 +199,8 @@ function ShowCode() {
       { name: "asyncConvolve.ts", url: asyncConvolveCode },
       { name: "arithmetical.ts", url: arithmetical },
     ],
-    "/laplacian-filter": laplacianFilterCode
+    "/laplacian-filter": laplacianFilterCode,
+    "/laplacian-sharpening": laplacianSharpeningCode,
   };
   const location = useLocation();
   const codeBlock = createMemo(() => {
