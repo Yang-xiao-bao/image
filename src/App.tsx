@@ -20,20 +20,20 @@ import { Basic } from "./pages/Basic";
 import { Grid, GridItem, List, ListItem } from "@hope-ui/solid";
 import { CodeBlock } from "./components/CodeBlock";
 import { Hist } from "./pages/Hist";
-import basic from "./libs/show.ts.txt";
-import histCode from "./libs/hist.ts.txt";
-import gray from "./libs/gray.ts.txt";
-import imadjust from "./libs/adjust.ts.txt";
-import adjustLines from "./libs/adjustLines.ts.txt";
-import histEqCode from "./libs/histeq.ts.txt";
-import histMatchCode from "./libs/histMatch.ts.txt";
-import excatHistMatch from "./libs/exactHistMatch.ts.txt";
-import strechlimCode from "./libs/stretchlim.ts.txt";
-import statisticsCode from "./libs/statistics.ts.txt";
-import convolveCode from "./libs/convolve.ts.txt";
-import asyncConvolveCode from "./libs/asyncConvolve.ts.txt";
-import boxFilterCode from "./libs/box-filter.ts.txt";
-import separableKernelCode from "./libs/separableKernel.ts.txt";
+import basic from "./libs/show.ts?url";
+import histCode from "./libs/hist.ts?url";
+import gray from "./libs/gray.ts?url";
+import imadjust from "./libs/adjust.ts?url";
+import adjustLines from "./libs/adjustLines.ts?url";
+import histEqCode from "./libs/histeq.ts?url";
+import histMatchCode from "./libs/histMatch.ts?url";
+import excatHistMatch from "./libs/exactHistMatch.ts?url";
+import strechlimCode from "./libs/stretchlim.ts?url";
+import statisticsCode from "./libs/statistics.ts?url";
+import convolveCode from "./libs/convolve.ts?url";
+import asyncConvolveCode from "./libs/asyncConvolve.ts?url";
+import boxFilterCode from "./libs/box-filter.ts?url";
+import separableKernelCode from "./libs/separableKernel.ts?url";
 import { Gray } from "./pages/Gray";
 import style from "./App.module.css";
 import { Adjust } from "./pages/Adjust";
@@ -43,7 +43,7 @@ import { AdjustLines } from "./pages/AdjustLines";
 import { Statistics } from "./pages/Statistics";
 import { HistSpecification } from "./pages/HistSpecification";
 import { LocalHistProcessing } from "./pages/LocalHistProcessing";
-import localHistProcessingCode from "./libs/localHist.ts.txt";
+import localHistProcessingCode from "./libs/localHist.ts?url";
 import { ExcatHistMatch } from "./pages/ExactHistMatch";
 import { TreeView } from "./components/TreeView";
 import { Tabs } from "./components/Tabs";
@@ -56,10 +56,10 @@ import { ShadowRemoval } from "./pages/ShadowRemoval";
 import { Padding } from './pages/Padding'
 import { Laplacian } from "./pages/Laplacian"
 import { LaplacianSharpening } from "./pages/LaplacianSharpening"
-import laplacianFilterCode from "./libs/laplacian.ts.txt"
-import arithmetical from "./libs/arithmetical.ts.txt"
-import gaussianFilterCode from "./libs/gaussian.ts.txt"
-import laplacianSharpeningCode from "./libs/laplacianSharpening.ts.txt"
+import laplacianFilterCode from "./libs/laplacian.ts?url"
+import arithmetical from "./libs/arithmetical.ts?url"
+import gaussianFilterCode from "./libs/gaussian.ts?url"
+import laplacianSharpeningCode from "./libs/laplacianSharpening.ts?url"
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
