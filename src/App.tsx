@@ -60,6 +60,7 @@ import laplacianFilterCode from "./libs/laplacian.ts?url"
 import arithmetical from "./libs/arithmetical.ts?url"
 import gaussianFilterCode from "./libs/gaussian.ts?url"
 import laplacianSharpeningCode from "./libs/laplacianSharpening.ts?url"
+import {Sobel} from './pages/Sobel'
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -101,6 +102,7 @@ const App: Component = () => {
               <Route path="/padding" component={Padding} />
               <Route path="/laplacian-filter" component={Laplacian} />
               <Route path="/laplacian-sharpening" component={LaplacianSharpening} />
+              <Route path="/sobel" component={Sobel} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -162,7 +164,8 @@ function Navigations() {
             { name: "高斯vs盒式", value: "/gaussian-vs-box" },
             { name: "阴影矫正", value: "/shadow-removal" },
             { name: "拉普拉斯滤波器核", value: "/laplacian-filter" },
-            { name: "锐化(拉普拉斯)", value: "/laplacian-sharpening" }
+            { name: "锐化(拉普拉斯)", value: "/laplacian-sharpening" },
+            { name: "Sobel", value: "/sobel" },
           ],
         },
       ]}
