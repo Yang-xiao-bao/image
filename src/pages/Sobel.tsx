@@ -6,6 +6,7 @@ import { abs, add, pow } from "../libs/arithmetical";
 import { convolve } from "../libs/convolve";
 import style from './Sobel.module.css'
 import Bikes from '../assets/Bikesgray.jpg'
+import { sobel } from "../libs/sobel";
 
 export function Sobel() {
   const [image, setImage] = createSignal<ImageData | null>(null)
@@ -26,23 +27,7 @@ export function Sobel() {
         .otherwise(() => null)}
       {match(image())
         .with(P.not(P.nullish), (img) => {
-          const a = convolve(img, [
-            [-1, -2, -1],
-            [0, 0, 0],
-            [1, 2, 1]
-          ])
-          const b = convolve(img, [
-            [-1, 0, 1],
-            [-2, 0, 2],
-            [-1, 0, 1]
-          ])
-          const c = pow(
-            add(
-              pow(a, 2),
-              pow(b, 2)
-            )
-            , 1 / 2)
-
+          const { a, b, c } = sobel(img)
           return <>
             <ImagePreview image={a} title="水平（以及对角）方向的边缘" />
             <ImagePreview image={b} title="垂直（以及对角）方向的边缘" />

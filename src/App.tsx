@@ -61,6 +61,7 @@ import arithmetical from "./libs/arithmetical.ts?url"
 import gaussianFilterCode from "./libs/gaussian.ts?url"
 import laplacianSharpeningCode from "./libs/laplacianSharpening.ts?url"
 import {Sobel} from './pages/Sobel'
+import sobelCode from './libs/sobel.ts?url'
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -204,6 +205,7 @@ function ShowCode() {
     ],
     "/laplacian-filter": laplacianFilterCode,
     "/laplacian-sharpening": laplacianSharpeningCode,
+    '/sobel': sobelCode,
   };
   const location = useLocation();
   const codeBlock = createMemo(() => {
