@@ -7,6 +7,7 @@ import { convolve } from "../libs/convolve";
 import style from './Sobel.module.css'
 import Bikes from '../assets/Bikesgray.jpg'
 import { sobel } from "../libs/sobel";
+import { ShowKernel } from "../components/ShowKernel";
 
 export function Sobel() {
   const [image, setImage] = createSignal<ImageData | null>(null)
@@ -21,6 +22,23 @@ export function Sobel() {
       defaultSelect={"Bikes"}
       onSelect={setImage}
     />
+    <ShowKernel
+      title="水平方向"
+      kernel={[
+        [-1, -2, -1],
+        [0, 0, 0],
+        [1, 2, 1]
+      ]}
+    />
+    <ShowKernel
+      title="垂直方向"
+      kernel={
+        [
+          [-1, 0, 1],
+          [-2, 0, 2],
+          [-1, 0, 1]
+        ]
+      } />
     <div class={style.container}>
       {match(image())
         .with(P.not(P.nullish), (img) => <ImagePreview image={img} title="原图" />)

@@ -1,5 +1,5 @@
 import { Text } from "@hope-ui/solid"
-import { createEffect, createMemo, createSignal } from "solid-js"
+import { createEffect, createMemo, createSignal, JSX } from "solid-js"
 import { FloatImageData, toImageData } from "../libs/image"
 import { show } from "../libs/show"
 import { Channel } from "../types/image"
@@ -10,7 +10,7 @@ export type ImagePreviewProps = {
   class?: string
   image: ImageData | FloatImageData
   channel?: Channel
-  title?: string
+  title?: JSX.Element
 }
 export function ImagePreview(props: ImagePreviewProps) {
   const [pos, setPos] = createSignal<[number, number] | null>()
