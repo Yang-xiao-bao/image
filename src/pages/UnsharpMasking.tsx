@@ -3,10 +3,9 @@ import { ImageSelector } from "../components/ImageSelector";
 import moon from "../assets/moon.png"
 import { match, P } from "ts-pattern";
 import { ImagePreview } from "../components/ImagePreview";
-import { unsharpMarking } from "../libs/unsharpMarking";
+import { unsharpMarking } from "../libs/unsharpMasking";
 import { Input, InputGroup, InputLeftAddon } from "@hope-ui/solid";
-import style from './UnshaprMarsking.module.css'
-import { createZonePlate } from "../libs/zonePlate";
+import style from './UnshaprMasking.module.css'
 
 export function UnsharpMasking() {
   const [sigma, setSigma] = createSignal(2)

@@ -62,6 +62,8 @@ import gaussianFilterCode from "./libs/gaussian.ts?url"
 import laplacianSharpeningCode from "./libs/laplacianSharpening.ts?url"
 import {Sobel} from './pages/Sobel'
 import sobelCode from './libs/sobel.ts?url'
+import {UnsharpMasking} from './pages/UnsharpMasking'
+import unsharpMaskingCode from './libs/unsharpMasking.ts?url'
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -104,6 +106,7 @@ const App: Component = () => {
               <Route path="/laplacian-filter" component={Laplacian} />
               <Route path="/laplacian-sharpening" component={LaplacianSharpening} />
               <Route path="/sobel" component={Sobel} />
+              <Route path="/unsharp-masking" component={UnsharpMasking} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -167,6 +170,7 @@ function Navigations() {
             { name: "拉普拉斯滤波器核", value: "/laplacian-filter" },
             { name: "锐化(拉普拉斯)", value: "/laplacian-sharpening" },
             { name: "Sobel", value: "/sobel" },
+            { name: "钝化掩码", value: "/unsharp-masking" },
           ],
         },
       ]}
@@ -206,6 +210,7 @@ function ShowCode() {
     "/laplacian-filter": laplacianFilterCode,
     "/laplacian-sharpening": laplacianSharpeningCode,
     '/sobel': sobelCode,
+    '/unsharp-masking': unsharpMaskingCode,
   };
   const location = useLocation();
   const codeBlock = createMemo(() => {
