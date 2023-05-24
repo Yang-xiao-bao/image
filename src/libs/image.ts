@@ -15,7 +15,7 @@ function grayImageData2ImageData(gray: GrayImageData) {
   const img = new ImageData(gray.width, gray.height)
   const hit = gray.hit || 'clamp'
   if (hit === 'clamp') {
-    for (let i = 0, j = 0; img.data.length; i += 4, j++) {
+    for (let i = 0, j = 0; i < img.data.length; i += 4, j++) {
       img.data[i] = gray.data[j]
       img.data[i + 1] = gray.data[j]
       img.data[i + 2] = gray.data[j]
@@ -31,15 +31,15 @@ function grayImageData2ImageData(gray: GrayImageData) {
   }
   const range = max - min
   if (range === 0) {
-    for (let i = 0, j = 0; img.data.length; i += 4, j++) {
+    for (let i = 0, j = 0; i < img.data.length; i += 4, j++) {
       img.data[i] = gray.data[j]
       img.data[i + 1] = gray.data[j]
       img.data[i + 2] = gray.data[j]
       img.data[i + 3] = 255
     }
   } else {
-    for (let i = 0, j = 0; img.data.length; i += 4, j++) {
-      const v = Math.round((gray.data[i] - min) / range * 255)
+    for (let i = 0, j = 0; i <= img.data.length; i += 4, j++) {
+      const v = Math.round((gray.data[j] - min) / range * 255)
       img.data[i] = v
       img.data[i + 1] = v
       img.data[i + 2] = v
@@ -51,6 +51,19 @@ function grayImageData2ImageData(gray: GrayImageData) {
 
 export function isGrayImageData(data: FloatImageData | GrayImageData): data is GrayImageData {
   return data.data.length === data.width * data.height
+}
+
+export function toGrayImageData(data: ImageData): GrayImageData {
+  const gray = new Float32Array(data.width * data.height)
+  for (let i = 0, j = 0; i < data.data.length; i += 4, j++) {
+    gray[j] = data.data[i]
+  }
+  return {
+    width: data.width,
+    height: data.height,
+    data: gray,
+    hit: 'clamp'
+  }
 }
 
 function floatImageData2ImageData(floatData: FloatImageData) {
