@@ -33,11 +33,7 @@ export function* convolve(
       r = it.next(yield (progress * 0.5) + 0.5)
     }
 
-    return new ImageData(
-      new Uint8ClampedArray(r.value!.data),
-      img.width,
-      img.height,
-    )
+    return r.value
   }
   return yield* asyncConvolve(img, kernel)
 }

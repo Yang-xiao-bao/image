@@ -64,6 +64,8 @@ import {Sobel} from './pages/Sobel'
 import sobelCode from './libs/sobel.ts?url'
 import {UnsharpMasking} from './pages/UnsharpMasking'
 import unsharpMaskingCode from './libs/unsharpMasking.ts?url'
+import { DFTBasic } from "./pages/DFTBasic";
+import { Filters } from "./pages/Filters";
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -107,6 +109,7 @@ const App: Component = () => {
               <Route path="/laplacian-sharpening" component={LaplacianSharpening} />
               <Route path="/sobel" component={Sobel} />
               <Route path="/unsharp-masking" component={UnsharpMasking} />
+              <Route path="/filters" component={Filters} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -171,6 +174,7 @@ function Navigations() {
             { name: "锐化(拉普拉斯)", value: "/laplacian-sharpening" },
             { name: "Sobel", value: "/sobel" },
             { name: "钝化掩码", value: "/unsharp-masking" },
+            { name: "用低通生成高通",value:"/filters"}
           ],
         },
       ]}
