@@ -7,7 +7,7 @@ export type DFTData = {
   height: number
   real: Float32Array
   imag: Float32Array
-  complex: math.Complex[]
+  shifted: boolean
 }
 export function DFT(image: GrayImageData, shift = false) {
   if (shift) {
@@ -38,12 +38,12 @@ export function DFT(image: GrayImageData, shift = false) {
       imag[index] = sum[1]
     }
   }
-  const result:DFTData = {
+  const result: DFTData = {
     width,
     height,
     real,
     imag,
-    complex
+    shifted:shift
   }
   return result
 }
@@ -86,7 +86,7 @@ export function DFT_(image: GrayImageData, shift = false): DFTData {
     height,
     real,
     imag,
-    complex
+    shifted:shift
   }
 }
 function shiftPreprocess(image: GrayImageData) {
@@ -103,14 +103,18 @@ function shiftPreprocess(image: GrayImageData) {
   }
 }
 export function IDFT(dft: DFTData) {
-  const { width, height, complex } = dft
+  const { width, height } = dft
   const data = new Float32Array(width * height)
   for (let u = 0; u < width; u++) {
     for (let v = 0; v < height; v++) {
       let sum = math.complex(0, 0)
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-          const f = complex[y * width + x]
+          //const f = complex[y * width + x]
+          const f = math.complex(
+            dft.real[y * width + x],
+            dft.imag[y * width + x]
+          )
           sum =
             math.add(
               sum,
