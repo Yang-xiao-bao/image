@@ -2,15 +2,21 @@ import { fft, ifft } from "./fft";
 import { GrayImageData } from "./image";
 
 export function dftFilter(
-  img: GrayImageData, filter: GrayImageData, shift = false) {
-  if (img.width !== filter.width || img.height !== filter.height) {
-    throw new Error("Size mismatch")
+  img: GrayImageData,
+  filterInfo: {
+    origin: 'left-top' | 'center',
+    data: GrayImageData
+  },
+  padding: 'none' | 'zero'
+) {
+  let { data: filter } = filterInfo
+  if (padding !== 'none') {
+    const w = img.width + filter.width
+    const h = img.height + filter.height
+    img = padImage(img, w, h)
+    filter = padImage(filter, w, h)
   }
-  const w = img.width + filter.width
-  const h = img.height + filter.height
-  img = padImage(img, w, h)
-  filter = padImage(filter, w, h)
-  const f = fft(img, shift)
+  const f = fft(img, filterInfo.origin === 'center')
   for (let i = 0; i < f.real.length; i++) {
     f.real[i] = f.real[i] * filter.data[i]
     f.imag[i] = f.imag[i] * filter.data[i]
