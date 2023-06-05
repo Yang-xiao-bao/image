@@ -49,7 +49,7 @@ export function ifft(data: DFTData) {
     for (let x = 0; x < data.width; x++) {
       for (let y = 0; y < data.height; y++) {
         real.data[y * data.width + x] = real.data[y * data.width + x]
-          / (-1) ** (x + y)
+          * (-1) ** (x + y)
       }
     }
   }

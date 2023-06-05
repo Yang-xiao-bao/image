@@ -53,7 +53,7 @@ export function isGrayImageData(data: FloatImageData | GrayImageData): data is G
   return data.data.length === data.width * data.height
 }
 
-export function toGrayImageData(data: ImageData): GrayImageData {
+export function toGrayImageData(data: ImageData|FloatImageData): GrayImageData {
   const gray = new Float32Array(data.width * data.height)
   for (let i = 0, j = 0; i < data.data.length; i += 4, j++) {
     gray[j] = data.data[i]
