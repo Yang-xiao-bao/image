@@ -60,12 +60,15 @@ import laplacianFilterCode from "./libs/laplacian.ts?url"
 import arithmetical from "./libs/arithmetical.ts?url"
 import gaussianFilterCode from "./libs/gaussian.ts?url"
 import laplacianSharpeningCode from "./libs/laplacianSharpening.ts?url"
-import {Sobel} from './pages/Sobel'
+import { Sobel } from './pages/Sobel'
 import sobelCode from './libs/sobel.ts?url'
-import {UnsharpMasking} from './pages/UnsharpMasking'
+import { UnsharpMasking } from './pages/UnsharpMasking'
 import unsharpMaskingCode from './libs/unsharpMasking.ts?url'
-import { DFTBasic } from "./pages/DFTBasic";
 import { Filters } from "./pages/Filters";
+import { DFTBasic } from './pages/frequency-domain/DFTBasic'
+import dftCode from './libs/dft.ts?url'
+import dftSpectrumCode from './libs/dftSpectrum.ts?url'
+import phaseAngleCode from './libs/phaseAngle.ts?url'
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -110,6 +113,7 @@ const App: Component = () => {
               <Route path="/sobel" component={Sobel} />
               <Route path="/unsharp-masking" component={UnsharpMasking} />
               <Route path="/filters" component={Filters} />
+              <Route path="/dft" component={DFTBasic} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -174,9 +178,19 @@ function Navigations() {
             { name: "锐化(拉普拉斯)", value: "/laplacian-sharpening" },
             { name: "Sobel", value: "/sobel" },
             { name: "钝化掩码", value: "/unsharp-masking" },
-            { name: "用低通生成高通",value:"/filters"}
+            { name: "用低通生成高通", value: "/filters" }
           ],
         },
+        {
+          name: "频域滤波",
+          value: "",
+          children: [
+            {
+              name: "离散傅里叶变换",
+              value: "/dft"
+            }
+          ]
+        }
       ]}
     />
   );
@@ -215,6 +229,11 @@ function ShowCode() {
     "/laplacian-sharpening": laplacianSharpeningCode,
     '/sobel': sobelCode,
     '/unsharp-masking': unsharpMaskingCode,
+    '/dft': [
+      { name: 'dft.ts', url: dftCode },
+      { name: 'dftSpectrum.ts', url: dftSpectrumCode },
+      { name: 'phaseAngle.ts', url: phaseAngleCode }
+    ]
   };
   const location = useLocation();
   const codeBlock = createMemo(() => {

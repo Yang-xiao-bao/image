@@ -1,6 +1,5 @@
 import * as math from 'mathjs'
 import { GrayImageData } from './image'
-import { Control } from './runner'
 
 export type DFTData = {
   width: number
@@ -17,7 +16,20 @@ export function DFT(image: GrayImageData, shift = false) {
   const { width, height } = image
   const real = new Float32Array(width * height)
   const imag = new Float32Array(width * height)
-  const complex: math.Complex[] = []
+  /*
+   * M - 1
+   * ______
+   * ╲      N - 1
+   *  ╲     ____
+   *   ╲    ╲                ⎛         ⎛ux   vy⎞    ⎞
+   *    ╲    ╲               ⎜-2 ⋅ π ⋅ ⎜── + ──⎟ ⋅ i⎟
+   *    ╱    ╱               ⎝         ⎝ M    N⎠    ⎠
+   *   ╱    ╱     f(x, y) ⋅ e
+   *  ╱     ‾‾‾‾
+   * ╱      y = 0
+   * ‾‾‾‾‾‾
+   *  x = 0
+   * **/
   for (let u = 0; u < width; u++) {
     for (let v = 0; v < height; v++) {
       let sum = [0, 0]
@@ -105,6 +117,20 @@ function shiftPreprocess(image: GrayImageData) {
 export function IDFT(dft: DFTData) {
   const { width, height } = dft
   const data = new Float32Array(width * height)
+  /*
+   *        M - 1
+   *       ______
+   *       ╲      N - 1
+   *        ╲     ____
+   *         ╲    ╲                ⎛        ⎛ux   vy⎞    ⎞
+   *          ╲    ╲               ⎜2 ⋅ π ⋅ ⎜── + ──⎟ ⋅ i⎟
+   *   1      ╱    ╱               ⎝        ⎝ M    N⎠    ⎠
+   *  ── ⋅   ╱    ╱     F(x, y) ⋅ e
+   *  MN    ╱     ‾‾‾‾
+   *       ╱      y = 0
+   *       ‾‾‾‾‾‾
+   *        x = 0
+   * **/
   for (let u = 0; u < width; u++) {
     for (let v = 0; v < height; v++) {
       let sum = math.complex(0, 0)

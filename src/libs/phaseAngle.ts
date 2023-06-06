@@ -1,4 +1,5 @@
 import { DFTData } from "./dft";
+import { ifft } from "./fft";
 import { GrayImageData } from "./image";
 
 export function phaseAngle(data: DFTData): GrayImageData {
@@ -18,4 +19,19 @@ export function phaseAngle(data: DFTData): GrayImageData {
     data: result,
     hit: 'remap'
   }
+}
+
+export function recontructFromPhaseAngle(data: DFTData) {
+  const p = phaseAngle(data)
+  const real = new Float32Array(data.width * data.height)
+  const imag = new Float32Array(data.width * data.height)
+  for (let i = 0; i < real.length; i++) {
+    real[i] = Math.cos(p.data[i])
+    imag[i] = Math.sin(p.data[i])
+  }
+  return ifft({
+    ...data,
+    real,
+    imag
+  })
 }
