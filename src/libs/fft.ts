@@ -2,10 +2,6 @@ import ndarray from "ndarray";
 import ndfft from 'ndarray-fft';
 import { DFTData } from "./dft";
 import { GrayImageData } from "./image";
-import { Buffer } from 'buffer'
-// Fix ndarray-fft
-(globalThis as any).global = globalThis;
-(globalThis as any).Buffer = Buffer
 
 export function fft(image: GrayImageData, shift = false): DFTData {
   const realData =

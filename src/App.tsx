@@ -69,6 +69,8 @@ import { DFTBasic } from './pages/frequency-domain/DFTBasic'
 import dftCode from './libs/dft.ts?url'
 import dftSpectrumCode from './libs/dftSpectrum.ts?url'
 import phaseAngleCode from './libs/phaseAngle.ts?url'
+import { FFT } from './pages/frequency-domain/FFT'
+import fftCode from './libs/fft.ts?url'
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -114,6 +116,7 @@ const App: Component = () => {
               <Route path="/unsharp-masking" component={UnsharpMasking} />
               <Route path="/filters" component={Filters} />
               <Route path="/dft" component={DFTBasic} />
+              <Route path="/fft" component={FFT} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -188,6 +191,10 @@ function Navigations() {
             {
               name: "离散傅里叶变换",
               value: "/dft"
+            },
+            {
+              name: "快速傅里叶变换",
+              value: "/fft"
             }
           ]
         }
@@ -231,6 +238,11 @@ function ShowCode() {
     '/unsharp-masking': unsharpMaskingCode,
     '/dft': [
       { name: 'dft.ts', url: dftCode },
+      { name: 'dftSpectrum.ts', url: dftSpectrumCode },
+      { name: 'phaseAngle.ts', url: phaseAngleCode }
+    ],
+    '/fft': [
+      { name: 'fft.ts', url: fftCode },
       { name: 'dftSpectrum.ts', url: dftSpectrumCode },
       { name: 'phaseAngle.ts', url: phaseAngleCode }
     ]
