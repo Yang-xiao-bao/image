@@ -71,6 +71,8 @@ import dftSpectrumCode from './libs/dftSpectrum.ts?url'
 import phaseAngleCode from './libs/phaseAngle.ts?url'
 import { FFT } from './pages/frequency-domain/FFT'
 import fftCode from './libs/fft.ts?url'
+import { FFT1 } from './pages/frequency-domain/FFT1'
+import FFT1Code from './pages/frequency-domain/FFT1.tsx?url'
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -117,6 +119,7 @@ const App: Component = () => {
               <Route path="/filters" component={Filters} />
               <Route path="/dft" component={DFTBasic} />
               <Route path="/fft" component={FFT} />
+              <Route path="/fft-spectrum" component={FFT1} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -195,6 +198,10 @@ function Navigations() {
             {
               name: "快速傅里叶变换",
               value: "/fft"
+            },
+            {
+              name: "观察频谱",
+              value: '/fft-spectrum'
             }
           ]
         }
@@ -245,7 +252,11 @@ function ShowCode() {
       { name: 'fft.ts', url: fftCode },
       { name: 'dftSpectrum.ts', url: dftSpectrumCode },
       { name: 'phaseAngle.ts', url: phaseAngleCode }
-    ]
+    ],
+    '/fft-spectrum': [
+      { name: 'FFT1.tsx', url: FFT1Code },
+      { name: 'dftSpectrum.ts', url: dftSpectrumCode },
+    ],
   };
   const location = useLocation();
   const codeBlock = createMemo(() => {
