@@ -73,6 +73,7 @@ import { FFT } from './pages/frequency-domain/FFT'
 import fftCode from './libs/fft.ts?url'
 import { FFT1 } from './pages/frequency-domain/FFT1'
 import FFT1Code from './pages/frequency-domain/FFT1.tsx?url'
+import { FFT_IFFT } from "./pages/frequency-domain/FFT_IFFT";
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -120,6 +121,7 @@ const App: Component = () => {
               <Route path="/dft" component={DFTBasic} />
               <Route path="/fft" component={FFT} />
               <Route path="/fft-spectrum" component={FFT1} />
+              <Route path="/fft-ifft" component={FFT_IFFT} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -202,6 +204,9 @@ function Navigations() {
             {
               name: "观察频谱",
               value: '/fft-spectrum'
+            }, {
+              name: "傅里叶变换和逆变换",
+              value: '/fft-ifft'
             }
           ]
         }
@@ -257,6 +262,7 @@ function ShowCode() {
       { name: 'FFT1.tsx', url: FFT1Code },
       { name: 'dftSpectrum.ts', url: dftSpectrumCode },
     ],
+    '/fft-ifft': []
   };
   const location = useLocation();
   const codeBlock = createMemo(() => {
