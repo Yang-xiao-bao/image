@@ -74,6 +74,7 @@ import fftCode from './libs/fft.ts?url'
 import { FFT1 } from './pages/frequency-domain/FFT1'
 import FFT1Code from './pages/frequency-domain/FFT1.tsx?url'
 import { FFT_IFFT } from "./pages/frequency-domain/FFT_IFFT";
+import fftIfftCode from "./pages/frequency-domain/FFT_IFFT.tsx?url"
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -262,7 +263,10 @@ function ShowCode() {
       { name: 'FFT1.tsx', url: FFT1Code },
       { name: 'dftSpectrum.ts', url: dftSpectrumCode },
     ],
-    '/fft-ifft': []
+    '/fft-ifft': [
+      { name: 'fft1.ts', url: fftCode },
+      { name: "FFT_IFFT.tsx", url: fftIfftCode },
+    ]
   };
   const location = useLocation();
   const codeBlock = createMemo(() => {
