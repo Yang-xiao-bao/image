@@ -75,6 +75,8 @@ import { FFT1 } from './pages/frequency-domain/FFT1'
 import FFT1Code from './pages/frequency-domain/FFT1.tsx?url'
 import { FFT_IFFT } from "./pages/frequency-domain/FFT_IFFT";
 import fftIfftCode from "./pages/frequency-domain/FFT_IFFT.tsx?url"
+import { TranslateOrigin } from "./pages/frequency-domain/TranslateOrigin";
+import fft2Code from './libs/fft2.ts?url'
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -123,6 +125,7 @@ const App: Component = () => {
               <Route path="/fft" component={FFT} />
               <Route path="/fft-spectrum" component={FFT1} />
               <Route path="/fft-ifft" component={FFT_IFFT} />
+              <Route path="/translate-origin" component={TranslateOrigin} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -208,6 +211,10 @@ function Navigations() {
             }, {
               name: "傅里叶变换和逆变换",
               value: '/fft-ifft'
+            },
+            {
+              name: "移动FFT的原点",
+              value: '/translate-origin'
             }
           ]
         }
@@ -266,7 +273,10 @@ function ShowCode() {
     '/fft-ifft': [
       { name: 'fft1.ts', url: fftCode },
       { name: "FFT_IFFT.tsx", url: fftIfftCode },
-    ]
+    ],
+    '/translate-origin': [
+      { name: 'fft2.ts', url: fft2Code },
+    ],
   };
   const location = useLocation();
   const codeBlock = createMemo(() => {
