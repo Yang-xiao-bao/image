@@ -1,6 +1,6 @@
 import { Text } from "@hope-ui/solid"
 import { createEffect, createMemo, createSignal, JSX } from "solid-js"
-import { FloatImageData, toImageData } from "../libs/image"
+import { FloatImageData, GrayImageData, toImageData } from "../libs/image"
 import { show } from "../libs/show"
 import { Channel } from "../types/image"
 import style from './ImagePreview.module.css'
@@ -8,7 +8,7 @@ import style from './ImagePreview.module.css'
 
 export type ImagePreviewProps = {
   class?: string
-  image: ImageData | FloatImageData
+  image: ImageData | FloatImageData | GrayImageData
   channel?: Channel
   title?: JSX.Element
 }

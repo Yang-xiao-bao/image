@@ -10,9 +10,9 @@ export type SurfaceViewerProps = {
 export function SurfaceViewer(props: SurfaceViewerProps) {
   const surface = createMemo(() => {
     const zs: number[][] = []
-    for (let x = props.x[0]; x < props.x[1]; x += props.steps[0]) {
+    for (let y = props.y[0]; y < props.y[1]; y += props.steps[1]) {
       const z: number[] = []
-      for (let y = props.y[0]; y < props.y[1]; y += props.steps[1]) {
+      for (let x = props.x[0]; x < props.x[1]; x += props.steps[0]) {
         z.push(props.z(x, y))
       }
       zs.push(z)
@@ -29,10 +29,10 @@ export function SurfaceViewer(props: SurfaceViewerProps) {
     Plotly.newPlot(div,
       data,
       {
-        width: 300,
-        height: 300,
-        autosize: true,
-      })
+        // width: 300,
+        // height: 300,
+        autosize: false,
+      }, { displayModeBar: false })
       .then((root) => {
         p = root
       })
