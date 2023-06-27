@@ -8,7 +8,7 @@ export type GrayImageData = {
   width: number,
   height: number,
   data: Float32Array,
-  hit?: 'remap' | 'clamp'
+  hit?: 'remap' | 'clamp' | 'log-clmap' | 'log-remap'
 }
 
 function grayImageData2ImageData(gray: GrayImageData) {
@@ -22,6 +22,17 @@ function grayImageData2ImageData(gray: GrayImageData) {
       img.data[i + 3] = 255
     }
     return img
+  } else if (hit.startsWith('log')) {
+    for (let i = 0, j = 0; i < img.data.length; i += 4, j++) {
+      const val = Math.sign(gray.data[j]) * Math.log(1 + Math.abs(gray.data[j]))
+      img.data[i] = val
+      img.data[i + 1] = val
+      img.data[i + 2] = val
+      img.data[i + 3] = 255
+    }
+    if(hit === 'log-clmap') {
+      return img
+    }
   }
   let min = gray.data[0]
   let max = gray.data[0]
@@ -53,7 +64,7 @@ export function isGrayImageData(data: FloatImageData | GrayImageData): data is G
   return data.data.length === data.width * data.height
 }
 
-export function toGrayImageData(data: ImageData|FloatImageData): GrayImageData {
+export function toGrayImageData(data: ImageData | FloatImageData): GrayImageData {
   const gray = new Float32Array(data.width * data.height)
   for (let i = 0, j = 0; i < data.data.length; i += 4, j++) {
     gray[j] = data.data[i]
