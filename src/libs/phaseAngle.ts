@@ -2,7 +2,7 @@ import { DFTData } from "./dft";
 import { ifft } from "./fft";
 import { GrayImageData } from "./image";
 
-export function phaseAngle(data: DFTData): GrayImageData {
+export function phaseAngle(data: { width: number, height: number, real: Float32Array, imag: Float32Array }): GrayImageData {
   const result = new Float32Array(data.width * data.height)
   for (let x = 0; x < data.width; x++) {
     for (let y = 0; y < data.height; y++) {

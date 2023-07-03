@@ -2,7 +2,7 @@ import { DFTData } from "./dft";
 import { ifft } from "./fft";
 import { GrayImageData } from "./image";
 
-export function dftSpectrum(data: DFTData, log = false) {
+export function dftSpectrum(data: Omit<DFTData, 'shifted'>, log = false) {
   const { width, height, real, imag } = data
   const specrum = new Float32Array(width * height)
   if (log) {
@@ -28,11 +28,11 @@ export function recontructBySpectrum(data: DFTData): GrayImageData {
   const img = ifft({
     ...data,
     real: spectruc.data,
-    imag:  new Float32Array(data.width * data.height)
+    imag: new Float32Array(data.width * data.height)
   })
-  for(let i  = 0;i<img.data.length;i++) {
-    if(img.data[i]>0) {
-      img.data[i] = Math.log(1+img.data[i])
+  for (let i = 0; i < img.data.length; i++) {
+    if (img.data[i] > 0) {
+      img.data[i] = Math.log(1 + img.data[i])
     }
   }
   return img
