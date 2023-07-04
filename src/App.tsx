@@ -77,6 +77,8 @@ import { FFT_IFFT } from "./pages/frequency-domain/FFT_IFFT";
 import fftIfftCode from "./pages/frequency-domain/FFT_IFFT.tsx?url"
 import { TranslateOrigin } from "./pages/frequency-domain/TranslateOrigin";
 import fft2Code from './libs/fft2.ts?url'
+import { Reconstruct } from "./pages/frequency-domain/Reconstruct";
+import reconstructCode from "./libs/reconstruct.ts?url"
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -126,6 +128,7 @@ const App: Component = () => {
               <Route path="/fft-spectrum" component={FFT1} />
               <Route path="/fft-ifft" component={FFT_IFFT} />
               <Route path="/translate-origin" component={TranslateOrigin} />
+              <Route path="/reconstruct" component={Reconstruct} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -215,6 +218,10 @@ function Navigations() {
             {
               name: "移动FFT的原点",
               value: '/translate-origin'
+            },
+            {
+              name: "用频谱或相角重建图像",
+              value: '/reconstruct'
             }
           ]
         }
@@ -276,6 +283,9 @@ function ShowCode() {
     ],
     '/translate-origin': [
       { name: 'fft2.ts', url: fft2Code },
+    ],
+    '/reconstruct': [
+      { name: "reconstruct.ts", url: reconstructCode }
     ],
   };
   const location = useLocation();

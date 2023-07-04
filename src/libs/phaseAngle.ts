@@ -21,17 +21,3 @@ export function phaseAngle(data: { width: number, height: number, real: Float32A
   }
 }
 
-export function recontructFromPhaseAngle(data: DFTData) {
-  const p = phaseAngle(data)
-  const real = new Float32Array(data.width * data.height)
-  const imag = new Float32Array(data.width * data.height)
-  for (let i = 0; i < real.length; i++) {
-    real[i] = Math.cos(p.data[i])
-    imag[i] = Math.sin(p.data[i])
-  }
-  return ifft({
-    ...data,
-    real,
-    imag
-  })
-}

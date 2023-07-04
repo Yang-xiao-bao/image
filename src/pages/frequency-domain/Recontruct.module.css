@@ -1,0 +1,7 @@
+.container {
+  display: grid;
+  grid-template-columns: auto auto;
+}
+.container canvas {
+  max-width: 400px;
+}
