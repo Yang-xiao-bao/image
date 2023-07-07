@@ -78,7 +78,9 @@ import fftIfftCode from "./pages/frequency-domain/FFT_IFFT.tsx?url"
 import { TranslateOrigin } from "./pages/frequency-domain/TranslateOrigin";
 import fft2Code from './libs/fft2.ts?url'
 import { Reconstruct } from "./pages/frequency-domain/Reconstruct";
+import { ViewGuassianFilter } from './pages/frequency-domain/ViewGuassianFilter'
 import reconstructCode from "./libs/reconstruct.ts?url"
+import fdGuassFilterCode from './libs/frequency-gaussian.ts?url'
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -129,6 +131,7 @@ const App: Component = () => {
               <Route path="/fft-ifft" component={FFT_IFFT} />
               <Route path="/translate-origin" component={TranslateOrigin} />
               <Route path="/reconstruct" component={Reconstruct} />
+              <Route path="/view-guassian" component={ViewGuassianFilter} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -222,6 +225,10 @@ function Navigations() {
             {
               name: "用频谱或相角重建图像",
               value: '/reconstruct'
+            },
+            {
+              name: "频域高斯滤波器",
+              value: '/view-guassian'
             }
           ]
         }
@@ -287,6 +294,9 @@ function ShowCode() {
     '/reconstruct': [
       { name: "reconstruct.ts", url: reconstructCode }
     ],
+    '/view-guassian': [
+      { name: "frequency-gaussian.ts", url: fdGuassFilterCode }
+    ]
   };
   const location = useLocation();
   const codeBlock = createMemo(() => {
