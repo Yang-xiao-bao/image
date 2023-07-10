@@ -81,6 +81,8 @@ import { Reconstruct } from "./pages/frequency-domain/Reconstruct";
 import { ViewGuassianFilter } from './pages/frequency-domain/ViewGuassianFilter'
 import reconstructCode from "./libs/reconstruct.ts?url"
 import fdGuassFilterCode from './libs/frequency-gaussian.ts?url'
+import { DC } from './pages/frequency-domain/DC'
+import dcCode from './pages/frequency-domain/DC.tsx?url'
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -132,6 +134,7 @@ const App: Component = () => {
               <Route path="/translate-origin" component={TranslateOrigin} />
               <Route path="/reconstruct" component={Reconstruct} />
               <Route path="/view-guassian" component={ViewGuassianFilter} />
+              <Route path="/dc" component={DC} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -229,6 +232,9 @@ function Navigations() {
             {
               name: "频域高斯滤波器",
               value: '/view-guassian'
+            },
+            {
+              name: "通过DC调节平均亮度", value: "/dc"
             }
           ]
         }
@@ -296,6 +302,9 @@ function ShowCode() {
     ],
     '/view-guassian': [
       { name: "frequency-gaussian.ts", url: fdGuassFilterCode }
+    ],
+    '/dc': [
+      { name: "DC.tsx", url: dcCode }
     ]
   };
   const location = useLocation();
