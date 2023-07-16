@@ -26,7 +26,7 @@ export function FFT_IFFT() {
               image={dftSpectrum(dft,true)}
             />
             <ImagePreview
-              image={i}
+              image={{...i,hit:'clamp'}}
             />
           </>
         }
