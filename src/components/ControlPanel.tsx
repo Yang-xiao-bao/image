@@ -2,6 +2,7 @@ import { Input, InputGroup, InputLeftAddon } from "@hope-ui/solid"
 import { JSXElement, useContext, createContext } from "solid-js"
 import { createStore, SetStoreFunction } from "solid-js/store"
 import { effect } from "solid-js/web"
+import { toGrayImageData } from "../libs/image"
 import { ImageSelector as ImgSelector } from "./ImageSelector"
 
 export type ControlPanelProps<T extends Record<string, any>> = {
@@ -43,12 +44,17 @@ export function Slider<K extends string>(props: {
 }
 
 export function ImageSelector(props: {
-  key: string
+  key: string,
+  gray?: boolean
 }) {
   const [_, setState] = useContext(Context)!
   return <ImgSelector
     onSelect={(img) => {
-      setState(props.key, img)
+      if (props.gray) {
+        setState(props.key, toGrayImageData(img))
+      } else {
+        setState(props.key, img)
+      }
     }}
   />
 }
