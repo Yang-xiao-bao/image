@@ -120,14 +120,14 @@ export function ifft(img: ComplexMatrix) {
     fft(img, true)
   )
 }
-export function complex(img: GrayImageData): ComplexMatrix {
+export function complex(img: GrayImageData, ox = 0, oy = 0): ComplexMatrix {
   return {
     real: new Float32Array(img.data),
     imag: new Float32Array(img.width * img.height),
     width: img.width,
     height: img.height,
-    ox: 0,
-    oy: 0,
+    ox,
+    oy,
   }
 }
 export function getImage(data: ComplexMatrix) {
