@@ -1,6 +1,5 @@
-import ndarray from "ndarray";
 import { GrayImageData } from "./image";
-import ndfft from 'ndarray-fft';
+import * as fftwHelper from './fftw-helper'
 
 export type ComplexMatrix = {
   real: Float32Array,
@@ -73,37 +72,30 @@ export function translate(
 
 
 export function fft(img: GrayImageData | ComplexMatrix, ifft = false) {
-  const [real, imag]
+  let [real, imag]
     = isComplexMatrix(img)
       ? [
-
-        ndarray(
-          new Float32Array(img.real),
-          [img.height, img.width]
-        ),
-        ndarray(
-          new Float32Array(img.imag),
-          [img.height, img.width]
-        )
-
+        img.real,
+        img.imag,
       ]
       : [
-        ndarray(
-          new Float32Array(img.data),
-          [img.height, img.width]
-        ),
-        ndarray(
-          new Float32Array(img.width * img.height),
-          [img.height, img.width]
-        )
-      ]
+        img.data,
+        new Float32Array(img.width * img.height),
+      ];
 
-  ndfft(ifft ? -1 : 1, real, imag)
+  [real, imag] = ifft ?
+    fftwHelper.ifft(real, imag, img.width, img.height) :
+    fftwHelper.fft(
+      real,
+      imag,
+      img.width,
+      img.height,
+    )
   return {
     width: img.width,
     height: img.height,
-    real: real.data,
-    imag: imag.data,
+    real,
+    imag,
     ox: isComplexMatrix(img) ? img.ox : 0,
     oy: isComplexMatrix(img) ? img.oy : 0
   }

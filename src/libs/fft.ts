@@ -1,7 +1,6 @@
-import ndarray from "ndarray";
-import ndfft from 'ndarray-fft';
 import { DFTData } from "./dft";
 import { GrayImageData } from "./image";
+import * as fftwHelper from "./fftw-helper";
 
 export function fft(image: GrayImageData, shift = false): DFTData {
   const realData =
@@ -14,37 +13,26 @@ export function fft(image: GrayImageData, shift = false): DFTData {
       }
     }
   }
-  const real = ndarray(
+  const [real, imag] = fftwHelper.fft(
     realData,
-    [image.width, image.height]
+    new Float32Array(realData.length),
+    image.width,
+    image.height
   )
-  const imag = ndarray(
-    new Float32Array(image.width * image.height),
-    [image.width, image.height]
-  )
-  ndfft(1, real, imag)
   return {
     width: image.width,
     height: image.height,
-    real: real.data,
-    imag: imag.data,
+    real: real,
+    imag: imag,
     shifted: shift
   }
 }
 export function ifft(data: DFTData) {
-  const real = ndarray(
-    new Float32Array(data.real),
-    [data.width, data.height]
-  )
-  const imag = ndarray(
-    new Float32Array(data.imag),
-    [data.width, data.height]
-  )
-  ndfft(-1, real, imag)
+  const [real, image] = fftwHelper.ifft(data.real, data.imag, data.width, data.height)
   if (data.shifted) {
     for (let x = 0; x < data.width; x++) {
       for (let y = 0; y < data.height; y++) {
-        real.data[y * data.width + x] = real.data[y * data.width + x]
+        real[y * data.width + x] = real[y * data.width + x]
           * (-1) ** (x + y)
       }
     }
@@ -52,7 +40,9 @@ export function ifft(data: DFTData) {
   return {
     width: data.width,
     height: data.height,
-    data: real.data,
+    data: real,
     hit: 'remap'
   } as GrayImageData
 }
+
+
