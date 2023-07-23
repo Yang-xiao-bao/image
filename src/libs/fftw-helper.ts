@@ -1,6 +1,7 @@
 import { FFTW, instantiateFFTWModuleFromFile } from '@shren/fftw-js'
-import url from '@shren/fftw-js/libfftw3-wasm/libfftw3.js?url'
-const module = await instantiateFFTWModuleFromFile(url)
+import url from '../fftw/libfftw3.js?url'
+import wasm from '../fftw/libfftw3.wasm?url'
+const module = await instantiateFFTWModuleFromFile(url,wasm)
 const fftw = new FFTW(module)
 
 export function fft(real: Float32Array, imag: Float32Array,
