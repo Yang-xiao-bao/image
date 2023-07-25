@@ -5,7 +5,7 @@ export function mul(left: ComplexMatrix, right: ComplexMatrix): ComplexMatrix {
     throw new Error("Size mismatch")
   }
   if (left.ox !== right.ox || left.oy !== right.oy) {
-    throw new Error("Original point mismatch")
+    console.warn("Original point mismatch")
   }
   const result = {
     real: new Float32Array(left.real.length),
