@@ -83,6 +83,10 @@ import reconstructCode from "./libs/reconstruct.ts?url"
 import fdGuassFilterCode from './libs/frequency-gaussian.ts?url'
 import { DC } from './pages/frequency-domain/DC'
 import dcCode from './pages/frequency-domain/DC.tsx?url'
+import { WraparoundError } from './pages/frequency-domain/WraparoundError'
+import paddingCode from './libs/padding.ts?url'
+import wraparoundErrorCode from './pages/frequency-domain/WraparoundError.tsx?url'
+import complexMulCode from './libs/complex-mul.ts?url'
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -135,6 +139,7 @@ const App: Component = () => {
               <Route path="/reconstruct" component={Reconstruct} />
               <Route path="/view-guassian" component={ViewGuassianFilter} />
               <Route path="/dc" component={DC} />
+              <Route path="/wraparound-error" component={WraparoundError} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -235,7 +240,8 @@ function Navigations() {
             },
             {
               name: "通过DC调节平均亮度", value: "/dc"
-            }
+            },
+            { name: "WraparoundError", value: "/wraparound-error" }
           ]
         }
       ]}
@@ -305,6 +311,12 @@ function ShowCode() {
     ],
     '/dc': [
       { name: "DC.tsx", url: dcCode }
+    ],
+    '/wraparound-error': [
+      { name: "padding.ts", url: paddingCode },
+      { name: 'fft2.ts', url: fft2Code },
+      { name: 'complex-mul.ts',url: complexMulCode},
+      { name: "WraparoundError.tsx", url: wraparoundErrorCode }
     ]
   };
   const location = useLocation();
