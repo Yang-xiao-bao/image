@@ -4,7 +4,7 @@ import { ifft, fft, translate, complex, getImage } from "../../libs/fft2"
 import { frequencyGuassianFilter } from "../../libs/frequency-gaussian"
 import { mul } from "../../libs/complex-mul"
 import { ImagePreview, ImagePreviewProps } from "../../components/ImagePreview"
-import { doubleSize, halfSize, paddingCentric } from "../../libs/padding"
+import { padRightBottom, takeLeftTop, paddingCentric } from "../../libs/padding"
 import { verticalBlur } from "./verticalBlur"
 import { dftSpectrum } from "../../libs/dftSpectrum";
 import { createStore } from "solid-js/store"
@@ -50,7 +50,7 @@ export function WraparoundError() {
     const img = store[0].image
     const size = store[0].blurSize
     if (img) {
-      const paddedImg = doubleSize(complex(img), 'mirror')
+      const paddedImg = padRightBottom(complex(img), 'mirror')
       const u = Math.floor(paddedImg.width / 2)
       const v = Math.floor(paddedImg.height / 2)
       const fftData = fft(translate(u, v, paddedImg))
@@ -61,7 +61,7 @@ export function WraparoundError() {
       )
       return {
         paddedImg: getImage(paddedImg),
-        processed: getImage(halfSize(complex(ifft(mul(fftData, filter.f)))))
+        processed: getImage(takeLeftTop(complex(ifft(mul(fftData, filter.f)))))
       }
     }
 

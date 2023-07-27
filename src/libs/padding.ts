@@ -1,9 +1,10 @@
 import { ComplexMatrix } from "./fft2";
 
-export function doubleSize(mat: ComplexMatrix,
-  padding: "zero" | "mirror"): ComplexMatrix {
-  const width = mat.width * 2
-  const height = mat.height * 2
+export function padRightBottom(mat: ComplexMatrix,
+  padding: "zero" | "mirror",
+  width: number = 2*mat.width,
+  height: number = 2*mat.height
+): ComplexMatrix {
   const result: ComplexMatrix = {
     imag: new Float32Array(width * height),
     real: new Float32Array(width * height),
@@ -54,24 +55,26 @@ export function doubleSize(mat: ComplexMatrix,
   }
   return result
 }
-export function paddingCentric(mat: ComplexMatrix,
-  factor: number
+export function padAround(
+  mat: ComplexMatrix,
+  left: number,
+  top: number,
+  right: number,
+  bottom: number
 ) {
-  const halfDx = Math.floor((mat.width * factor - mat.width) / 2)
-  const halfDy = Math.floor((factor * mat.height - mat.height) / 2)
-  const width = mat.width + halfDx * 2
-  const height = mat.width + halfDy * 2
+  const width = mat.width + left + right
+  const height = mat.height + top + bottom
   const result: ComplexMatrix = {
     real: new Float32Array(width * height),
     imag: new Float32Array(width * height),
     width, height,
-    ox: mat.ox + halfDx,
-    oy: mat.oy + halfDy
+    ox: mat.ox + left,
+    oy: mat.oy + top
   }
   for (let x = 0; x < mat.width; x++) {
     for (let y = 0; y < mat.height; y++) {
-      const x1 = x + halfDx
-      const y2 = y + halfDy
+      const x1 = x + left - 1
+      const y2 = y + top - 1
       const j = x1 + y2 * width
       const i = x + y * mat.width
       result.real[j] = mat.real[i]
@@ -81,9 +84,14 @@ export function paddingCentric(mat: ComplexMatrix,
   return result
 }
 
-export function halfSize(mat: ComplexMatrix): ComplexMatrix {
-  const width = Math.floor(mat.width / 2)
-  const height = Math.floor(mat.height / 2)
+export function takeLeftTop(
+  mat: ComplexMatrix,
+  width: number = mat.width / 2,
+  height: number = mat.height / 2
+): ComplexMatrix {
+  if (width > mat.width || height > mat.height) {
+    throw new Error("width and height must be smaller than mat.width and mat.height")
+  }
   const result: ComplexMatrix = {
     imag: new Float32Array(width * height),
     real: new Float32Array(width * height),
