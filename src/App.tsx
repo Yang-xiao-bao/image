@@ -89,6 +89,8 @@ import paddingCode from './libs/padding.ts?url'
 import wraparoundErrorCode from './pages/frequency-domain/WraparoundError.tsx?url'
 import complexMulCode from './libs/complex-mul.ts?url'
 import spatial1Code from './pages/frequency-domain/BuildFilterFromSpatial1.tsx?url'
+import {BuildFilterFromSpatial2} from './pages/frequency-domain/BuildFilterFromSpatial2'
+import spatial2Code from './pages/frequency-domain/BuildFilterFromSpatial2.tsx?url'
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -143,6 +145,7 @@ const App: Component = () => {
               <Route path="/dc" component={DC} />
               <Route path="/wraparound-error" component={WraparoundError} />
               <Route path="/spatial-to-frequency-1" component={BuildFilthrFromSpatial1} />
+              <Route path="/spatial-to-frequency-2" component={BuildFilterFromSpatial2} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -245,7 +248,8 @@ function Navigations() {
               name: "通过DC调节平均亮度", value: "/dc"
             },
             { name: "WraparoundError", value: "/wraparound-error" },
-            { name: '用空域Filter生成频域Filter', value: "/spatial-to-frequency-1" }
+            { name: '用空域Filter生成频域Filter 1', value: "/spatial-to-frequency-1" },
+            { name: '用空域Filter生成频域Filter 2', value: "/spatial-to-frequency-2" }
           ]
         }
       ]}
@@ -325,6 +329,10 @@ function ShowCode() {
     '/spatial-to-frequency-1': [
       { name: 'fft1.ts', url: fftCode },
       { name: 'BuildFilthrFromSpatial1.tsx', url: spatial1Code }
+    ],
+    '/spatial-to-frequency-2': [
+      { name: 'fft1.ts', url: fftCode },
+      { name: 'BuildFilthrFromSpatial2.tsx', url: spatial2Code }
     ]
   };
   const location = useLocation();
