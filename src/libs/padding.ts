@@ -1,9 +1,10 @@
 import { ComplexMatrix } from "./fft2";
+import { GrayImageData } from "./image";
 
 export function padRightBottom(mat: ComplexMatrix,
   padding: "zero" | "mirror",
-  width: number = 2*mat.width,
-  height: number = 2*mat.height
+  width: number = 2 * mat.width,
+  height: number = 2 * mat.height
 ): ComplexMatrix {
   const result: ComplexMatrix = {
     imag: new Float32Array(width * height),
@@ -84,28 +85,47 @@ export function padAround(
   return result
 }
 
-export function takeLeftTop(
-  mat: ComplexMatrix,
+export function takeLeftTop<T extends ComplexMatrix | GrayImageData>(
+  mat: T,
   width: number = mat.width / 2,
   height: number = mat.height / 2
-): ComplexMatrix {
+): T {
   if (width > mat.width || height > mat.height) {
     throw new Error("width and height must be smaller than mat.width and mat.height")
   }
-  const result: ComplexMatrix = {
-    imag: new Float32Array(width * height),
-    real: new Float32Array(width * height),
-    width, height,
-    ox: 0,
-    oy: 0
+  function isMat(a: any): a is ComplexMatrix {
+    return a.imag != null
   }
-  for (let x = 0; x < width; x++) {
-    for (let y = 0; y < height; y++) {
-      let i = y * mat.width + x
-      let j = y * width + x
-      result.imag[j] = mat.imag[i]
-      result.real[j] = mat.real[i]
+  if (isMat(mat)) {
+    const result: ComplexMatrix = {
+      imag: new Float32Array(width * height),
+      real: new Float32Array(width * height),
+      width, height,
+      ox: 0,
+      oy: 0
     }
+    for (let x = 0; x < width; x++) {
+      for (let y = 0; y < height; y++) {
+        let i = y * mat.width + x
+        let j = y * width + x
+        result.imag[j] = mat.imag[i]
+        result.real[j] = mat.real[i]
+      }
+    }
+    return result as T
+  } else {
+    const result: GrayImageData = {
+      data: new Float32Array(width * height),
+      hit: mat.hit,
+      width, height,
+    }
+    for (let x = 0; x < width; x++) {
+      for (let y = 0; y < height; y++) {
+        let i = y * mat.width + x
+        let j = y * width + x
+        result.data[j] = mat.data[i]
+      }
+    }
+    return result as T
   }
-  return result
 }
