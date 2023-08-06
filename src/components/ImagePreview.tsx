@@ -59,7 +59,7 @@ export function ImagePreview(props: ImagePreviewProps) {
     return { right: "0" }
   })
 
-  return <div class={style.container}>
+  return <div class={style.container+' '+props.class}>
     <Text>{props.title}</Text>
     <span style={{position:'relative'}}>
       {canvas}

@@ -94,6 +94,7 @@ import spatial2Code from './pages/frequency-domain/BuildFilterFromSpatial2.tsx?u
 import { IdealLowPassFilter } from "./pages/IdealLowPassFilter";
 import idealLowpassFilterCode from './libs/ideal-lowpass.ts?url'
 import IdealLowPassFilterCode from "./pages/IdealLowPassFilter.tsx?url"
+import { RingingArtifact } from './pages/frequency-domain/RingingArtifact'
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -150,6 +151,7 @@ const App: Component = () => {
               <Route path="/spatial-to-frequency-1" component={BuildFilthrFromSpatial1} />
               <Route path="/spatial-to-frequency-2" component={BuildFilterFromSpatial2} />
               <Route path="/ideal-lowpass" component={IdealLowPassFilter} />
+              <Route path="/ring" component={RingingArtifact} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -255,6 +257,7 @@ function Navigations() {
             { name: '用空域Filter生成频域Filter 1', value: "/spatial-to-frequency-1" },
             { name: '用空域Filter生成频域Filter 2', value: "/spatial-to-frequency-2" },
             { name: '理想低通滤波器', value: "/ideal-lowpass" },
+            { name: '振铃效应', value: "/ring" },
           ]
         }
       ]}
