@@ -1,23 +1,33 @@
 import { Input, InputGroup, InputLeftAddon } from "@hope-ui/solid";
 import { createMemo, createSignal } from "solid-js";
 import { ImagePreview } from "../../components/ImagePreview";
-import { ImageSelector } from "../../components/ImageSelector";
 import { SurfaceViewer } from "../../components/SurfaceViewer";
 import { dftSpectrum } from "../../libs/dftSpectrum";
 import { GrayImageData, toGrayImageData } from "../../libs/image";
 import { fft, getImage, ifft, translate } from "../../libs/fft2";
 import style from './TranslateOrigin.module.css'
+import { ControlPanel, Slider, ImageSelector } from "../../components/ControlPanel";
+import { createStore } from "solid-js/store";
 
 export function TranslateOrigin() {
-  const [image, setImage] = createSignal<GrayImageData>()
-  const [x, setX] = createSignal<number>(0)
-  const [y, setY] = createSignal<number>(0)
+  type Params = {
+    x: number,
+    y: number,
+    img?: ImageData
+  }
+  const store = createStore<Params>({
+    x: 0,
+    y: 0,
+  })
   const fftPlot = createMemo(() => {
-    const img = image()
+    const param = store[0]
+    const x = param.x;
+    const y = param.y;
+    const img = param.img
     if (img) {
       const fftData = fft(translate(
-        x(), y(),
-        img
+        x * img.width, y * img.height,
+        toGrayImageData(img)
       ))
       const spectrum = dftSpectrum(fftData, true)
 
@@ -34,23 +44,24 @@ export function TranslateOrigin() {
       </div>
     }
   })
-  return <div> 
-    <ImageSelector onSelect={img => {
-      setImage(toGrayImageData(img))
-    }}
-    />
-    <InputGroup>
-      <InputLeftAddon>
-        X
-      </InputLeftAddon>
-      <Input min={0} max={image()?.width ?? 0} value={x()} type="range" onChange={e => setX(e.currentTarget.valueAsNumber)} />
-    </InputGroup>
-    <InputGroup>
-      <InputLeftAddon>
-        Y
-      </InputLeftAddon>
-      <Input min={0} max={image()?.height ?? 0} value={y()} type="range" onChange={e => setY(e.currentTarget.valueAsNumber)} />
-    </InputGroup>
+  return <div>
+    <ControlPanel
+      store={store}
+    >
+      <ImageSelector key="img" />
+      <Slider
+        title="X"
+        min={0}
+        key="x"
+        max={1}
+      />
+      <Slider
+        title="Y"
+        min={0}
+        key="y"
+        max={1}
+      />
+    </ControlPanel>
     {fftPlot}
   </div>
 }

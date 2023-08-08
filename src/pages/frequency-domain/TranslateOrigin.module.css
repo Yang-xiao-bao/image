@@ -2,3 +2,6 @@
   display: flex;
   flex-wrap:wrap;
 }
+.container canvas {
+  max-width:400px;
+}
