@@ -22,7 +22,8 @@ export function Slider<K extends string>(props: {
   title: string,
   key: K
   min: number,
-  max: number
+  max: number,
+  step?: number
 }) {
   const [state, setState] = useContext(Context)!
   const value = Number(state[props.key])
@@ -33,7 +34,7 @@ export function Slider<K extends string>(props: {
     <Input
       min={props.min}
       max={props.max}
-      step={(props.max - props.min) / 100}
+      step={props.step ?? (props.max - props.min) / 100}
       type="range"
       value={value}
       onChange={(e) => {
