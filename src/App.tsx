@@ -95,6 +95,9 @@ import { IdealLowPassFilter } from "./pages/IdealLowPassFilter";
 import idealLowpassFilterCode from './libs/ideal-lowpass.ts?url'
 import IdealLowPassFilterCode from "./pages/IdealLowPassFilter.tsx?url"
 import { RingingArtifact } from './pages/frequency-domain/RingingArtifact'
+import { GuassianFilter } from './pages/frequency-domain/GuassianFilter'
+import ringingArtifactCode from './pages/frequency-domain/RingingArtifact.tsx?url'
+import guassianFilterCode from './pages/frequency-domain/GuassianFilter.tsx?url'
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -152,6 +155,7 @@ const App: Component = () => {
               <Route path="/spatial-to-frequency-2" component={BuildFilterFromSpatial2} />
               <Route path="/ideal-lowpass" component={IdealLowPassFilter} />
               <Route path="/ring" component={RingingArtifact} />
+              <Route path="/freq-guassian" component={GuassianFilter} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -258,6 +262,7 @@ function Navigations() {
             { name: '用空域Filter生成频域Filter 2', value: "/spatial-to-frequency-2" },
             { name: '理想低通滤波器', value: "/ideal-lowpass" },
             { name: '振铃效应', value: "/ring" },
+            { name: '高斯滤波', value: "/freq-guassian" },
           ]
         }
       ]}
@@ -345,6 +350,13 @@ function ShowCode() {
     '/ideal-lowpass': [
       { name: "idealLowpassFilter.ts", url: idealLowpassFilterCode },
       { name: "IdealLowpassFilter.tsx", url: IdealLowPassFilterCode },
+    ],
+    '/ring': [
+      { name: 'RingingArtifact.tsx', url: ringingArtifactCode }
+    ],
+    '/freq-guassian': [
+      { name: "frequency-gaussian.ts", url: fdGuassFilterCode },
+      { name: "GuassianFilter.tsx", url: guassianFilterCode }
     ]
   };
   const location = useLocation();
