@@ -98,6 +98,9 @@ import { RingingArtifact } from './pages/frequency-domain/RingingArtifact'
 import { GuassianFilter } from './pages/frequency-domain/GuassianFilter'
 import ringingArtifactCode from './pages/frequency-domain/RingingArtifact.tsx?url'
 import guassianFilterCode from './pages/frequency-domain/GuassianFilter.tsx?url'
+import { Butterworth } from "./pages/frequency-domain/Butterworth";
+import butterworthCode from './pages/frequency-domain/Butterworth.tsx?url'
+import butterworthFilterCode from './libs/butterworth.ts?url'
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -156,6 +159,7 @@ const App: Component = () => {
               <Route path="/ideal-lowpass" component={IdealLowPassFilter} />
               <Route path="/ring" component={RingingArtifact} />
               <Route path="/freq-guassian" component={GuassianFilter} />
+              <Route path="/butterworth" component={Butterworth} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -263,6 +267,7 @@ function Navigations() {
             { name: '理想低通滤波器', value: "/ideal-lowpass" },
             { name: '振铃效应', value: "/ring" },
             { name: '高斯滤波', value: "/freq-guassian" },
+            { name: 'Butterworth 滤波器', value: "/butterworth" },
           ]
         }
       ]}
@@ -357,6 +362,10 @@ function ShowCode() {
     '/freq-guassian': [
       { name: "frequency-gaussian.ts", url: fdGuassFilterCode },
       { name: "GuassianFilter.tsx", url: guassianFilterCode }
+    ],
+    '/butterworth': [
+      { name: 'butterwoth.ts', url: butterworthFilterCode },
+      { name: 'Butterworth.tsx', url: butterworthCode }
     ]
   };
   const location = useLocation();
