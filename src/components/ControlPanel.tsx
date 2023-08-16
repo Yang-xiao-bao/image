@@ -1,5 +1,5 @@
-import { Input, InputGroup, InputLeftAddon } from "@hope-ui/solid"
-import { JSXElement, useContext, createContext } from "solid-js"
+import { Input, InputGroup, InputLeftAddon, Select, SelectContent, SelectIcon, SelectListbox, SelectOption, SelectOptionIndicator, SelectOptionText, SelectPlaceholder, SelectTrigger, SelectValue } from "@hope-ui/solid"
+import { JSXElement, useContext, createContext, For } from "solid-js"
 import { createStore, SetStoreFunction } from "solid-js/store"
 import { effect } from "solid-js/web"
 import { toGrayImageData } from "../libs/image"
@@ -41,6 +41,40 @@ export function Slider<K extends string>(props: {
         setState(props.key, () => e.currentTarget.valueAsNumber)
       }}
     />
+  </InputGroup>
+}
+export function Selector<V>(props: {
+  key: string,
+  title: string,
+  options: Array<{ label: string, value: V }>
+}) {
+  const [val, setState] = useContext(Context)!
+  return <InputGroup>
+    <InputLeftAddon>{props.title}</InputLeftAddon>
+    <Select
+      value={val[props.key]}
+      onChange={e => {
+        setState(props.key,
+          props.options.find(i => i.label === e)!.value
+        )
+      }}
+    >
+      <SelectTrigger>
+        <SelectPlaceholder>{props.title}</SelectPlaceholder>
+        <SelectValue />
+        <SelectIcon />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectListbox>
+          <For each={props.options}>
+            {item => <SelectOption value={item.label}>
+              <SelectOptionText>{item.label}</SelectOptionText>
+              <SelectOptionIndicator />
+            </SelectOption>}
+          </For>
+        </SelectListbox>
+      </SelectContent>
+    </Select>
   </InputGroup>
 }
 
