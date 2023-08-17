@@ -6,7 +6,7 @@ import { GrayImageData, toGrayImageData } from '../libs/image'
 import { ComplexMatrix, complex, fft, ifft, translate } from '../libs/fft2'
 import { DFTData } from '../libs/dft'
 import { idealLowpassFilter } from '../libs/ideal-lowpass'
-import { mul } from '../libs/complex-mul'
+import { mul } from '../libs/complex-ops'
 import { padRightBottom, takeLeftTop } from '../libs/padding'
 import style from './IdealLowPassFilter.module.css'
 

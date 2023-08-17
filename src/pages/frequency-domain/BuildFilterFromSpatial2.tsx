@@ -7,7 +7,7 @@ import { GrayImageData, toImageData } from "../../libs/image"
 import { padRightBottom, padAround, takeLeftTop } from "../../libs/padding"
 import { ControlPanel, ImageSelector } from "../../components/ControlPanel"
 import { createMemo } from "solid-js"
-import { mul } from "../../libs/complex-mul"
+import { mul } from "../../libs/complex-ops"
 import { convolve } from "../../libs/convolve"
 
 export function BuildFilterFromSpatial2() {

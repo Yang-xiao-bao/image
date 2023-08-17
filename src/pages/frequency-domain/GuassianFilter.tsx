@@ -4,7 +4,7 @@ import { createMemo } from "solid-js";
 import { frequencyGuassianFilter } from "../../libs/frequency-gaussian";
 import { complex, fft, ifft, translate } from "../../libs/fft2";
 import { padRightBottom, takeLeftTop } from "../../libs/padding";
-import { mul } from "../../libs/complex-mul";
+import { mul } from "../../libs/complex-ops";
 import { ImagePreview } from "../../components/ImagePreview";
 import { ControlPanel, ImageSelector, Slider } from "../../components/ControlPanel";
 import { CurveViewer } from "../../components/CurveViewer";
