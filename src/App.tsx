@@ -87,7 +87,7 @@ import { WraparoundError } from './pages/frequency-domain/WraparoundError'
 import { BuildFilthrFromSpatial1 } from './pages/frequency-domain/BuildFilterFromSpatial1'
 import paddingCode from './libs/padding.ts?url'
 import wraparoundErrorCode from './pages/frequency-domain/WraparoundError.tsx?url'
-import complexMulCode from './libs/complex-mul.ts?url'
+import complexMulCode from './libs/complex-ops.ts?url'
 import spatial1Code from './pages/frequency-domain/BuildFilterFromSpatial1.tsx?url'
 import { BuildFilterFromSpatial2 } from './pages/frequency-domain/BuildFilterFromSpatial2'
 import spatial2Code from './pages/frequency-domain/BuildFilterFromSpatial2.tsx?url'
@@ -101,6 +101,8 @@ import guassianFilterCode from './pages/frequency-domain/GuassianFilter.tsx?url'
 import { Butterworth } from "./pages/frequency-domain/Butterworth";
 import butterworthCode from './pages/frequency-domain/Butterworth.tsx?url'
 import butterworthFilterCode from './libs/butterworth.ts?url'
+import { HighPassFilter } from './pages/frequency-domain/HighPass'
+import highPassFilterCode from './pages/frequency-domain/HighPass.tsx?url'
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -160,6 +162,7 @@ const App: Component = () => {
               <Route path="/ring" component={RingingArtifact} />
               <Route path="/freq-guassian" component={GuassianFilter} />
               <Route path="/butterworth" component={Butterworth} />
+              <Route path="/highpass" component={HighPassFilter} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -268,6 +271,7 @@ function Navigations() {
             { name: '振铃效应', value: "/ring" },
             { name: '高斯滤波', value: "/freq-guassian" },
             { name: 'Butterworth 滤波器', value: "/butterworth" },
+            { name: '高通滤波', value: "/highpass" },
           ]
         }
       ]}
@@ -366,6 +370,9 @@ function ShowCode() {
     '/butterworth': [
       { name: 'butterwoth.ts', url: butterworthFilterCode },
       { name: 'Butterworth.tsx', url: butterworthCode }
+    ],
+    '/highpass': [
+      { name: 'HighPass.tsx', url: highPassFilterCode }
     ]
   };
   const location = useLocation();
