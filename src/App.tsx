@@ -103,6 +103,9 @@ import butterworthCode from './pages/frequency-domain/Butterworth.tsx?url'
 import butterworthFilterCode from './libs/butterworth.ts?url'
 import { HighPassFilter } from './pages/frequency-domain/HighPass'
 import highPassFilterCode from './pages/frequency-domain/HighPass.tsx?url'
+import { UnsharpMasking as FreqUnsharpMasking } from './pages/frequency-domain/UnsharpMasking'
+import freqUnsharpMaskingCode from './pages/frequency-domain/UnsharpMasking.tsx?url'
+import freqUnsharpMasking2Code from './libs/freqUnsharpMasking.ts?url'
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -163,6 +166,7 @@ const App: Component = () => {
               <Route path="/freq-guassian" component={GuassianFilter} />
               <Route path="/butterworth" component={Butterworth} />
               <Route path="/highpass" component={HighPassFilter} />
+              <Route path="/freq-unsharp-marking" component={FreqUnsharpMasking} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -272,6 +276,7 @@ function Navigations() {
             { name: '高斯滤波', value: "/freq-guassian" },
             { name: 'Butterworth 滤波器', value: "/butterworth" },
             { name: '高通滤波', value: "/highpass" },
+            { name: '钝化掩码锐化', value: "/freq-unsharp-marking" },
           ]
         }
       ]}
@@ -373,6 +378,10 @@ function ShowCode() {
     ],
     '/highpass': [
       { name: 'HighPass.tsx', url: highPassFilterCode }
+    ],
+    '/freq-unsharp-marking': [
+      { name: 'freqUnsharpMasking.ts', url: freqUnsharpMasking2Code },
+      { name: 'UnsharpMasking.tsx', url: freqUnsharpMaskingCode }
     ]
   };
   const location = useLocation();
