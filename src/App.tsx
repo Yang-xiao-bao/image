@@ -106,6 +106,9 @@ import highPassFilterCode from './pages/frequency-domain/HighPass.tsx?url'
 import { UnsharpMasking as FreqUnsharpMasking } from './pages/frequency-domain/UnsharpMasking'
 import freqUnsharpMaskingCode from './pages/frequency-domain/UnsharpMasking.tsx?url'
 import freqUnsharpMasking2Code from './libs/freqUnsharpMasking.ts?url'
+import { NotchRejct } from './pages/frequency-domain/NothReject'
+import notchRejectCode from './pages/frequency-domain/NothReject.tsx?url'
+import notchRejectCode1 from './libs/notchReject.ts?url'
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -167,6 +170,7 @@ const App: Component = () => {
               <Route path="/butterworth" component={Butterworth} />
               <Route path="/highpass" component={HighPassFilter} />
               <Route path="/freq-unsharp-marking" component={FreqUnsharpMasking} />
+              <Route path="/notch-reject" component={NotchRejct} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -277,6 +281,7 @@ function Navigations() {
             { name: 'Butterworth 滤波器', value: "/butterworth" },
             { name: '高通滤波', value: "/highpass" },
             { name: '钝化掩码锐化', value: "/freq-unsharp-marking" },
+            { name: 'Notch Reject', value: "/notch-reject" },
           ]
         }
       ]}
@@ -382,6 +387,10 @@ function ShowCode() {
     '/freq-unsharp-marking': [
       { name: 'freqUnsharpMasking.ts', url: freqUnsharpMasking2Code },
       { name: 'UnsharpMasking.tsx', url: freqUnsharpMaskingCode }
+    ],
+    '/notch-reject': [
+      { name: 'NotchReject.tsx', url: notchRejectCode },
+      { name: 'nothcReject.ts', url: notchRejectCode1 }
     ]
   };
   const location = useLocation();
