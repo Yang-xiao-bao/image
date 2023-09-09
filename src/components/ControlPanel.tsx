@@ -3,7 +3,7 @@ import { JSXElement, useContext, createContext, For, createMemo } from "solid-js
 import { createStore, SetStoreFunction } from "solid-js/store"
 import { effect } from "solid-js/web"
 import { toGrayImageData } from "../libs/image"
-import { ImageSelector as ImgSelector } from "./ImageSelector"
+import { ImageSelectorProps, ImageSelector as ImgSelector } from "./ImageSelector"
 
 export type ControlPanelProps<T extends Record<string, any>> = {
   store: [T, SetStoreFunction<T>]
@@ -50,7 +50,7 @@ export function Selector<V>(props: {
 }) {
   const [val, setState] = useContext(Context)!
   const value = createMemo(() => {
-    return props.options.find(i=>i.value === val[props.key])?.label
+    return props.options.find(i => i.value === val[props.key])?.label
   })
   return <InputGroup>
     <InputLeftAddon>{props.title}</InputLeftAddon>
@@ -81,12 +81,13 @@ export function Selector<V>(props: {
   </InputGroup>
 }
 
-export function ImageSelector(props: {
+export function ImageSelector(props: ImageSelectorProps & {
   key: string,
   gray?: boolean
 }) {
   const [_, setState] = useContext(Context)!
   return <ImgSelector
+    {...props}
     onSelect={(img) => {
       if (props.gray) {
         setState(props.key, toGrayImageData(img))
