@@ -1,3 +1,4 @@
+
 export type FloatImageData = {
   width: number,
   height: number,
@@ -9,6 +10,13 @@ export type GrayImageData = {
   height: number,
   data: Float32Array,
   hit?: 'remap' | 'clamp' | 'log-clmap' | 'log-remap'
+}
+export type BinaryImageData = {
+  width: number,
+  height: number,
+  // 0 为黑色,1 为白色
+  // 0 为背景，1 为前景
+  data: Uint8Array
 }
 
 function grayImageData2ImageData(gray: GrayImageData) {
@@ -30,7 +38,7 @@ function grayImageData2ImageData(gray: GrayImageData) {
       img.data[i + 2] = val
       img.data[i + 3] = 255
     }
-    if(hit === 'log-clmap') {
+    if (hit === 'log-clmap') {
       return img
     }
   }
@@ -60,8 +68,11 @@ function grayImageData2ImageData(gray: GrayImageData) {
   return img
 }
 
-export function isGrayImageData(data: FloatImageData | GrayImageData): data is GrayImageData {
-  return data.data.length === data.width * data.height
+export function isGrayImageData(data: FloatImageData | GrayImageData | BinaryImageData): data is GrayImageData {
+  return data.data instanceof Float32Array && data.data.length === data.width * data.height
+}
+export function isBinaryImageData(data: FloatImageData | BinaryImageData): data is BinaryImageData {
+  return data.data instanceof Uint8Array
 }
 
 export function toGrayImageData(data: ImageData | FloatImageData): GrayImageData {
@@ -121,9 +132,40 @@ function floatImageData2ImageData(floatData: FloatImageData) {
   return new ImageData(data, floatData.width, floatData.height)
 }
 
+function binaryImageDat2ImageData(img: BinaryImageData) {
+  const data = new ImageData(img.width, img.height);
+  for (let i = 0; i < img.data.length; i++) {
+    const j = i * 4
+    if (img.data[i] === 1) {
+      data.data[j] = 255
+      data.data[j + 1] = 255
+      data.data[j + 2] = 255
+    }
+    data.data[j + 3] = 255
+  }
+  return data
+}
+
 export function toImageData(img: FloatImageData | GrayImageData) {
   if (isGrayImageData(img)) {
     return grayImageData2ImageData(img)
   }
+  if (isBinaryImageData(img)) {
+    return binaryImageDat2ImageData(img)
+  }
   return floatImageData2ImageData(img)
+}
+
+export function toBinaryImageData(img: ImageData) {
+  const result = {
+    width: img.width,
+    height: img.height,
+    data: new Uint8Array(img.width * img.height)
+  }
+  for (let i = 0; i < result.data.length; i++) {
+    if (img.data[i * 4] > 128) {
+      result.data[i] = 1
+    }
+  }
+  return result
 }
