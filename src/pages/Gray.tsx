@@ -8,6 +8,8 @@ import { ImageSelector } from '../components/ImageSelector'
 import { Slider } from '../components/Slider'
 import { gray } from '../libs/gray'
 import style from './Gray.module.css'
+import { toBinaryImageData } from '../libs/image'
+import { erode } from '../libs/morphological/erode'
 
 export function Gray() {
   const [image, setImage] = createSignal<ImageData | null>(null)
@@ -28,6 +30,13 @@ export function Gray() {
   const g = createMemo(() => {
     const img = image()
     if (img) {
+    return erode(toBinaryImageData(img),{
+        width:3,
+        height:3,
+        ox:1,
+        oy:1,
+        data: new Uint8Array(9).fill(1)
+        })
       return gray(img, [0, 1, 0])
     }
   })
@@ -35,6 +44,7 @@ export function Gray() {
   const b = createMemo(() => {
     const img = image()
     if (img) {
+      return toBinaryImageData(img)
       return gray(img, [0, 0, 1])
     }
   })

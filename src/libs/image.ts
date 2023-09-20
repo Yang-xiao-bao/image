@@ -146,7 +146,7 @@ function binaryImageDat2ImageData(img: BinaryImageData) {
   return data
 }
 
-export function toImageData(img: FloatImageData | GrayImageData) {
+export function toImageData(img: FloatImageData | GrayImageData| BinaryImageData) {
   if (isGrayImageData(img)) {
     return grayImageData2ImageData(img)
   }

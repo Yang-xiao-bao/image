@@ -109,6 +109,7 @@ import freqUnsharpMasking2Code from './libs/freqUnsharpMasking.ts?url'
 import { NotchRejct } from './pages/frequency-domain/NothReject'
 import notchRejectCode from './pages/frequency-domain/NothReject.tsx?url'
 import notchRejectCode1 from './libs/notchReject.ts?url'
+import { Erosion } from "./pages/morphological/Erosion";
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -171,6 +172,7 @@ const App: Component = () => {
               <Route path="/highpass" component={HighPassFilter} />
               <Route path="/freq-unsharp-marking" component={FreqUnsharpMasking} />
               <Route path="/notch-reject" component={NotchRejct} />
+              <Route path="/morphological/erosion" component={Erosion} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -282,6 +284,13 @@ function Navigations() {
             { name: '高通滤波', value: "/highpass" },
             { name: '钝化掩码锐化', value: "/freq-unsharp-marking" },
             { name: 'Notch Reject', value: "/notch-reject" },
+          ]
+        },
+        {
+          name: "形态学",
+          value:"",
+          children:[
+            {name:"Erosion",value:"/morphological/erosion"}
           ]
         }
       ]}
