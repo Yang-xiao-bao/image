@@ -114,10 +114,10 @@ const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
   return (
     <Grid gap="10px" h="100vh" templateColumns="300px 1fr">
-      <GridItem>
+      <GridItem style={{overflow: "auto"}}>
         <Navigations />
       </GridItem>
-      <GridItem>
+      <GridItem style={{overflow:"auto"}}>
         <Tabs
           class={style.tabs}
           tabs={["效果", "关键代码"]}
