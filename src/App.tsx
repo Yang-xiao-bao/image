@@ -110,6 +110,7 @@ import { NotchRejct } from './pages/frequency-domain/NothReject'
 import notchRejectCode from './pages/frequency-domain/NothReject.tsx?url'
 import notchRejectCode1 from './libs/notchReject.ts?url'
 import { Erosion } from "./pages/morphological/Erosion";
+import { Dilation } from "./pages/morphological/Dilation";
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
@@ -173,6 +174,7 @@ const App: Component = () => {
               <Route path="/freq-unsharp-marking" component={FreqUnsharpMasking} />
               <Route path="/notch-reject" component={NotchRejct} />
               <Route path="/morphological/erosion" component={Erosion} />
+              <Route path="/morphological/dilation" component={Dilation} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -290,7 +292,8 @@ function Navigations() {
           name: "形态学",
           value:"",
           children:[
-            {name:"Erosion",value:"/morphological/erosion"}
+            {name:"Erosion",value:"/morphological/erosion"},
+            {name:"Dilation",value:"/morphological/dilation"}
           ]
         }
       ]}
