@@ -5,7 +5,7 @@ export function erode(img: BinaryImageData, se: StructureElements) {
   const r: BinaryImageData = {
     width: img.width,
     height: img.height,
-    data: new Uint8Array(img.data)
+    data: new Uint8Array(img.data.length)
   }
   for (let x = se.ox; x < (img.width - (se.width - se.ox)); x++) {
     for (let y = se.oy; y < (img.height - (se.height - se.oy)); y++) {
