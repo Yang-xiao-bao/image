@@ -111,15 +111,19 @@ import notchRejectCode from './pages/frequency-domain/NothReject.tsx?url'
 import notchRejectCode1 from './libs/notchReject.ts?url'
 import { Erosion } from "./pages/morphological/Erosion";
 import { Dilation } from "./pages/morphological/Dilation";
+import { Opening } from "./pages/morphological/Opening";
+import { Closing } from "./pages/morphological/Closing";
+import ClosingCode from './pages/morphological/Closing.tsx?url'
+import closingCode from './libs/morphological/closing.ts?url'
 
 const App: Component = () => {
   const [tab, setTab] = createSignal("效果");
   return (
     <Grid gap="10px" h="100vh" templateColumns="300px 1fr">
-      <GridItem style={{overflow: "auto"}}>
+      <GridItem style={{ overflow: "auto" }}>
         <Navigations />
       </GridItem>
-      <GridItem style={{overflow:"auto"}}>
+      <GridItem style={{ overflow: "auto" }}>
         <Tabs
           class={style.tabs}
           tabs={["效果", "关键代码"]}
@@ -175,6 +179,8 @@ const App: Component = () => {
               <Route path="/notch-reject" component={NotchRejct} />
               <Route path="/morphological/erosion" component={Erosion} />
               <Route path="/morphological/dilation" component={Dilation} />
+              <Route path="/morphological/opening" component={Opening} />
+              <Route path="/morphological/closing" component={Closing} />
               <Route path="*" element={<Navigate href="/basic" />} />
             </Routes>
           </Match>
@@ -290,10 +296,12 @@ function Navigations() {
         },
         {
           name: "形态学",
-          value:"",
-          children:[
-            {name:"Erosion",value:"/morphological/erosion"},
-            {name:"Dilation",value:"/morphological/dilation"}
+          value: "",
+          children: [
+            { name: "Erosion", value: "/morphological/erosion" },
+            { name: "Dilation", value: "/morphological/dilation" },
+            { name: "Opening", value: "/morphological/opening" },
+            { name: "Closing", value: "/morphological/closing" }
           ]
         }
       ]}
@@ -403,6 +411,10 @@ function ShowCode() {
     '/notch-reject': [
       { name: 'NotchReject.tsx', url: notchRejectCode },
       { name: 'nothcReject.ts', url: notchRejectCode1 }
+    ],
+    '/morphological/closing': [
+      { name: 'Closing.tsx', url: ClosingCode },
+      { name: 'closing.ts', url: closingCode }
     ]
   };
   const location = useLocation();
